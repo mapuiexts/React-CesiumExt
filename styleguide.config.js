@@ -37,7 +37,7 @@ module.exports = {
         //link: 'firebrick',
         link: '#61dafb',
         linkHover: 'salmon',
-        sidebarBackground: '#000000',
+        sidebarBackground: '#000000 ',
         codeBase:'#FFF',
         baseBackground: '#FFF',
         codeBackground: '#000000',
