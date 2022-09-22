@@ -6,8 +6,9 @@ the button in the viewport and set its size.
 
 ```js
 import CustomViewerWidget from './CustomViewerWidget';
-import { Ion, createWorldTerrain, createOsmBuildings, Cartesian3, Math } from "cesium";
+import { Ion, createWorldTerrain, createOsmBuildings, Cartesian3, Math, Cesium3DTileset } from "cesium";
 import ButtonControlContainer from '../../container/ButtonControlContainer/ButtonControlContainer';
+import 'antd/dist/antd.min.css';
 import 'cesium/Widgets/widgets.css';
 import '../../../../assets/css/react-cesiumext-controls.css';
 
@@ -16,11 +17,15 @@ Ion.defaultAccessToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI1OGZjN
 const CustomViewerWidgetExample = () => {
     const onStart = (viewer) => {
         console.log(viewer);
-        // Add Cesium OSM Buildings, a global 3D buildings layer.
-        viewer.scene.primitives.add(createOsmBuildings());   
+        // Add Buildings for Grand Place/Belgium.
+        viewer.scene.primitives.add(
+            new Cesium3DTileset({
+                url: 'https://mapuiexts.github.io/react-cesiumext.github.io/assets/3D_Tiles/UrbAdm3D_148170_3DTILES/tileset/tileset.json',
+            })
+        ); 
         // Fly the camera to San Francisco at the given longitude, latitude, and height.
         viewer.camera.flyTo({
-        destination : Cartesian3.fromDegrees(-122.4175, 37.655, 400),
+        destination : Cartesian3.fromDegrees( 4.3524312269858, 50.84678117753969, 100),
         orientation : {
             heading : Math.toRadians(0.0),
             pitch : Math.toRadians(-15.0),

@@ -1,10 +1,37 @@
 const path = require('path');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 const webpackConfig = require('./webpack.base.config.js');
+const webpack = require('webpack');
 
+const cesiumSource = "node_modules/cesium/Source";
 
 module.exports = {
     //
+    moduleAliases: {
+      'cesium': path.resolve(__dirname, cesiumSource)
+    },
     webpackConfig, //https://github.com/styleguidist/react-styleguidist/issues/1910, https://gist.github.com/nebomilic/938f93695b4ed6756fb37db757aca06f
+    dangerouslyUpdateWebpackConfig(webpackConfig, env) {
+      // WARNING: inspect Styleguidist Webpack config before modifying it, otherwise you may break Styleguidist
+      //console.log(webpackConfig)
+      // if(env === 'production') {
+      //   webpackConfig.plugins = [
+      //     webpackConfig.plugins[0],
+      //     webpackConfig.plugins[1],
+      //     webpackConfig.plugins[2],
+      //     webpackConfig.plugins[4],
+      //     webpackConfig.plugins[5],
+      //     webpackConfig.plugins[6],
+      //   ];
+
+      //   webpackConfig.output.sourcePrefix= '';
+      //   webpackConfig.devServer= { transportMode: 'ws' };
+      //   webpackConfig.devtool= 'eval-source-map';
+      //   delete webpackConfig.optimization;
+      // }
+      console.log(webpackConfig);
+      return webpackConfig
+    },
     components: 'src/**/*.{js,jsx,tsx}',
     getExampleFilename(componentPath) {
       return componentPath.replace(/\.js?$/, '.md');
@@ -80,12 +107,53 @@ module.exports = {
         sectionDepth: 1,
         sections: [
           {
+            name: 'panel',
+            //content: 'docs/ui.md',
+            components: [
+              'src/components/panel/**/*.{js,jsx,ts,tsx}'
+            ],
+            ignore: [
+              'src/components/panel/Panel/Expander/**/*.{js,jsx,ts,tsx}',
+              'src/components/panel/Panel/Header/**/*.{js,jsx,ts,tsx}'
+            ],
+            //sectionDepth: 3,
+            exampleMode: 'expand', // 'hide' | 'collapse' | 'expand'
+            usageMode: 'expand' // 'hide' | 'collapse' | 'expand'
+          },
+          {
+            name: 'tree',
+            sections:[
+              {
+                name: 'imageryLayer',
+                components: [
+                  'src/components/tree/imageryLayer/**/*.{js,jsx,ts,tsx}'
+                ],
+                exampleMode: 'expand', // 'hide' | 'collapse' | 'expand'
+                usageMode: 'expand' // 'hide' | 'collapse' | 'expand'
+              }
+            ]
+          },
+          {
             name: 'widget',
             sections:[
               {
                 name: 'viewer',
                 components: [
                   'src/components/widget/viewer/**/*.{js,jsx,ts,tsx}'
+                ],
+                exampleMode: 'expand', // 'hide' | 'collapse' | 'expand'
+                usageMode: 'expand' // 'hide' | 'collapse' | 'expand'
+              }
+            ]
+          },
+          {
+            name: 'window',
+            //content: 'docs/ui.md',
+            sections: [
+              {
+                name: 'base',
+                components: [
+                  'src/components/window/base/**/*.{js,jsx,ts,tsx}'
                 ],
                 exampleMode: 'expand', // 'hide' | 'collapse' | 'expand'
                 usageMode: 'expand' // 'hide' | 'collapse' | 'expand'
@@ -98,5 +166,6 @@ module.exports = {
         name: 'Glossary',
         content: 'docs/glossary.md'
       },
-    ]
+    ],
+    
 }

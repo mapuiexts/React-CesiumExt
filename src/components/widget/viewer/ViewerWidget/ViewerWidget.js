@@ -1,6 +1,6 @@
-import React, { useRef, useEffect, useState } from 'react';
+import React, { useRef, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import {Viewer} from 'cesium';
+import {Viewer, defined} from 'cesium';
 import './ViewerWidget.css';
 
 
@@ -16,19 +16,24 @@ const ViewerWidget = ({
     ...otherProps
 }) => {
     const viewerRef = useRef();
-    const [viewer, setViewer] = useState(null);
+    const viewerContainerRef = useRef();
 
     useEffect(() => {
-        if(viewer === null) {
-            const aViewer = new Viewer(viewerRef.current, options);
+        if(!defined(viewerRef.current)) {
+            const aViewer = new Viewer(viewerContainerRef.current, options);
+            viewerRef.current = aViewer;
             onStart && onStart(aViewer);
-            setViewer(aViewer);
         }
-    }, [options, onStart, viewer]);
+        return () => {
+            console.log('destructor');
+            viewerRef.current.destroy();
+            viewerRef.current = null;
+        }
+    }, [onStart, options]);
 
     return (
         <div {...otherProps}
-             ref={viewerRef}
+             ref={viewerContainerRef}
              className="react-cesiumext-viewer"
         >
             {children}

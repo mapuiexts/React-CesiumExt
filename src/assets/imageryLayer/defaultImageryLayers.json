@@ -1,0 +1,23 @@
+{
+    "layers": [{
+            "title": "OSM",
+            "type": "OpenStreetMap",
+            "options": {
+                "show": false
+            },
+            "provider": {
+                "url": "https://a.tile.openstreetmap.org/"
+            }
+        },
+        {
+            "title": "ArcGIS World Imagery",
+            "type": "ArcGisMapServer",
+            "options": {
+                "show": true
+            },
+            "provider": {
+                "url": "https://services.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer"
+            }
+        }
+    ]
+}

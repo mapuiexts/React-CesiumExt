@@ -1,0 +1,50 @@
+{
+    "layers": [{
+            "title": "URBIS layer",
+            "type": "WebMapService",
+            "options": {
+                "show": false
+            },
+            "provider": {
+                "url": "https://geoservices-urbis.irisnet.be/geoserver/ows",
+                "layers": "urbisFR",
+                "parameters": {
+                    "transparent": true,
+                    "tiled": true,
+                    "format": "image/png"
+                }
+            }
+        },
+        {
+            "title": "PICC layer",
+            "type": "WebMapService",
+            "options": {
+                "show": false
+            },
+            "provider": {
+                "url": "https://geoservices.wallonie.be/arcgis/services/TOPOGRAPHIE/PICC_VDIFF/MapServer/WMSServer",
+                "layers": "1,3,4,5,7,9,10,11,12,14,15,16,17,19,20,21,23,24,25,26,27,28,29",
+                "parameters": {
+                    "transparent": false,
+                    "format": "image/png"
+                }
+            }
+        },
+        {
+            "title": "GRB layer",
+            "type": "WebMapService",
+            "options": {
+                "show": false
+            },
+            "provider": {
+                "url": "https://geoservices.informatievlaanderen.be/raadpleegdiensten/GRB-selectie/wms",
+                "layers": "GRB_BSK",
+                "parameters": {
+                    "transparent": true,
+                    "tiled": true,
+                    "format": "image/png"
+                }
+            }
+        }
+    ]
+}

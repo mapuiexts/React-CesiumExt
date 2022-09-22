@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useState, useCallback } from 'react';
+import React, { useRef, useEffect, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import {CesiumWidget, defined} from 'cesium';
 import Controls from './Controls/Controls';
@@ -17,7 +17,7 @@ const CustomViewerWidget = ({
     ...otherProps
 }) => {
 
-
+    const viewerRef = useRef();
     const containerViewerRef = useRef();
     const containerBottomRef = useRef();
 
@@ -29,28 +29,23 @@ const CustomViewerWidget = ({
                 creditContainer: containerBottomRef.current
             };
         }
-        console.log('creating a CesiumWidget');
         const cesiumViewer = new CesiumWidget(containerViewerRef.current, myOptions);
-        console.log('container element', cesiumViewer.container);
         onStart && onStart(cesiumViewer);
 
         return cesiumViewer;
     }, [onStart, options]);
 
    
-    const [viewer, setViewer] = useState();
 
     useEffect(() => {
-        if(!defined(viewer)) {
-            console.log('hiiii');
-            const cesiumViewer = createCesiumViewer();
-            setViewer(cesiumViewer);
+        if(!defined(viewerRef.current)) {
+            viewerRef.current = createCesiumViewer();
         }
         return () => {
-            defined(viewer) && viewer.destroy();
-            //setViewer(null);
+            defined(viewerRef.current) && viewerRef.current.destroy();
+            viewerRef.current = null;
         }
-    }, [viewer, createCesiumViewer]);
+    }, [createCesiumViewer]);
 
     return (
         <div className="react-cesiumext-custom-viewer" {...otherProps}>

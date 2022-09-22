@@ -1,0 +1,9 @@
+.rolext-panel {
+    display: flex;
+    flex-direction: column;
+    background: white;
+}
+
+.rolext-panel-body-el {
+    padding: 0.5rem;
+}

@@ -1,0 +1,15 @@
+.rolext-wnd {
+    position: fixed;
+    /* top: 30vh;
+    left: calc(50% - 15rem); */
+    top: 0px;
+    left: 0px;
+    z-index: 100;
+    height: 0px;
+}
+
+.rolext-wnd-btn-container {
+    display: flex;
+    gap: 5px;
+    justify-content: flex-end;
+}
