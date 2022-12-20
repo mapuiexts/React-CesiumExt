@@ -32,10 +32,26 @@ const DataSourceTree = ({
         const flatArray = format.asFlatArray(treeData);
         console.log('flat array', flatArray);
         const visibleArray= flatArray.filter(node=> defined(node.dataSource) && node.dataSource.show === true);
-        const checkedKeys = visibleArray.map(node => node.key);
+        const checkedKeys = visibleArray.map(node => node.key).sort();
         console.log('checkedKeys', checkedKeys);
         return checkedKeys;
     }, []);
+
+    const isArraysEqual = (a, b) => {
+        if (a === b) return true;
+        if (a == null || b == null) return false;
+        if (a.length !== b.length) return false;
+      
+        // If you don't care about the order of the elements inside
+        // the array, you should sort both arrays here.
+        // Please note that calling sort on an array will modify that array.
+        // you might want to clone your array first.
+      
+        for (var i = 0; i < a.length; ++i) {
+            if (a[i] !== b[i]) return false;
+        }
+        return true;
+    };
 
     /**
      * Rebuild the tree data.
@@ -44,11 +60,30 @@ const DataSourceTree = ({
      */
     const rebuildTreeNodes = useCallback(() => {
         if(viewer) {
+           
             const format = new DataSourceTreeDataFormat();
             const newTreeData = format.writeTreeData(viewer, rootName); 
             setCurrentTreeData(newTreeData);
+            setCheckedKeys((prevCheckedKeys) => {
+                const curCheckedKeys = getVisibleKeys(newTreeData);
+                if(isArraysEqual(prevCheckedKeys, curCheckedKeys)) {
+                    return prevCheckedKeys;
+                }
+                else {
+                    return curCheckedKeys;
+                }
+            });
         }
-    }, [viewer, rootName]);
+    }, [viewer, rootName, getVisibleKeys]);
+
+    // const rebuildTreeNodes = useCallback(() => {
+    //     if(viewer) {
+    //         //setCheckedKeys(getVisibleKeys(currentTreeData));
+    //         const format = new DataSourceTreeDataFormat();
+    //         const newTreeData = format.writeTreeData(viewer, rootName); 
+    //         setCurrentTreeData(newTreeData);
+    //     }
+    // }, [viewer, rootName]);
 
     /**
      * The callback method to be called after the tree
@@ -83,7 +118,7 @@ const DataSourceTree = ({
           });
         } 
         else {
-            if (defined(node.layer)) {
+            if (defined(node.dataSource)) {
                 console.log('set dataSource visibility', isVisible);
                 node.dataSource.show = isVisible;
             }
@@ -105,18 +140,29 @@ const DataSourceTree = ({
     }, [setVisibility, onCheck, currentTreeData, getVisibleKeys]);
 
     /**
-     * Callback called once new dataSource is added
+     * callback called once the datasource name is changed
      */
-    const onDataSourceAdded = useCallback((dataSource, index) => {
+    const onDataSourceChanged = useCallback((ds) => {
+        console.log('datasource', ds);
         rebuildTreeNodes();
     }, [rebuildTreeNodes]);
 
     /**
+     * Callback called once new dataSource is added
+     */
+    const onDataSourceAdded = useCallback((dsCol, ds) => {
+        ds.changedEvent.addEventListener(onDataSourceChanged);
+        rebuildTreeNodes();
+
+    }, [rebuildTreeNodes, onDataSourceChanged]);
+
+    /**
      * Callback called once a dataSource is removed
      */
-    const onDataSourceRemoved = useCallback((dataSource, index) => {
+    const onDataSourceRemoved = useCallback((dsCol, ds) => {
+        ds.changedEvent.removeEventListener(onDataSourceChanged);
         rebuildTreeNodes();
-    }, [rebuildTreeNodes]);
+    }, [rebuildTreeNodes, onDataSourceChanged]);
 
     /**
      * Callback called once a dataSource is moved
@@ -125,6 +171,9 @@ const DataSourceTree = ({
         rebuildTreeNodes();
     }, [rebuildTreeNodes]);
 
+    useEffect(() => {
+        setCheckedKeys(getVisibleKeys(currentTreeData));
+    }, [currentTreeData, getVisibleKeys]);
 
     /**
      * rebuild the tree nodes
@@ -134,11 +183,7 @@ const DataSourceTree = ({
     }, [rebuildTreeNodes]);
 
 
-    useEffect(() => {
-        setCheckedKeys(getVisibleKeys(currentTreeData));
-    }, [currentTreeData, getVisibleKeys]);
-
-    //register/unregister cesium events
+    //register/unregister cesium events for the datasource collection
     useEffect(() => {
         viewer && viewer?.dataSources?.dataSourceAdded.addEventListener(onDataSourceAdded);
         viewer && viewer?.dataSources?.dataSourceRemoved.addEventListener(onDataSourceRemoved );
@@ -150,6 +195,25 @@ const DataSourceTree = ({
         }
   
       }, [onDataSourceAdded, onDataSourceRemoved, onDataSourceMoved, viewer]);
+
+    /**
+     * Register in the existing dataSources to handler to react to 
+     * the datasource changes
+     */
+    useEffect(() => {
+        const format = new DataSourceTreeDataFormat();
+        const flatArray = format.asFlatArray(currentTreeData);
+        flatArray.forEach((node) => {
+            defined(node.dataSource) && node.dataSource.changedEvent.addEventListener(onDataSourceChanged);
+        });
+        
+        return () => {
+            const flatArray = format.asFlatArray(currentTreeData);
+            flatArray.forEach((node) => {
+                defined(node.dataSource) && node.dataSource.changedEvent.removeEventListener(onDataSourceChanged);
+            });
+        }
+    }, [currentTreeData, onDataSourceChanged]);
 
       return (
         <Tree

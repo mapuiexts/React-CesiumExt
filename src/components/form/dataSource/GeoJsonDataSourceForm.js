@@ -1,8 +1,7 @@
 import React, { useMemo} from 'react';
 import DataSourceForm from "./DataSourceForm";
 import GeneralFormItems from "./items/general/GeneralFormItems";
-import GeoJsonGeneralFormItems from "./items/general/GeoJsonGeneralFormItems";
-import GeoJsonStyleFormItems from './items/style/GeoJsonStyleFormItems';
+import GeoJsonLoadOptionsFormItems from './items/loadOptions/GeoJsonLoadOptionsFormItems';
 
 /**
  * A from to create/update a GeoJson DataSource
@@ -19,25 +18,18 @@ const GeoJsonDataSourceForm = ({
     const items = useMemo(() => {
         return (
             [
-                
+                {
+                    label: 'Load Options', 
+                    key: 'LOAD_OPTIONS', 
+                    forceRender: true,
+                    children: <GeoJsonLoadOptionsFormItems mode={mode}/>
+                },
                 {
                     label: 'General', 
                     key: 'GENERAL', 
                     forceRender: true,
-                    children: (
-                        <React.Fragment>
-                            <GeneralFormItems mode={mode}/>
-                            <GeoJsonGeneralFormItems mode={mode}/>
-                        </React.Fragment>
-                    )
-                },
-                {
-                    label: 'Style', 
-                    key: 'STYLE', 
-                    forceRender: true,
-                    children: <GeoJsonStyleFormItems mode={mode}/>
-                },
-                
+                    children: <GeneralFormItems mode={mode} nameIsUpdatable={true}/>
+                }
             ]
         );
     }, [mode]);

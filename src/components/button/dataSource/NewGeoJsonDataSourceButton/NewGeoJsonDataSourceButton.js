@@ -1,12 +1,9 @@
 import React, {useState, useCallback} from 'react';
+import { GeoJsonDataSource } from 'cesium';
 import {Button} from 'antd';
 import Window from "../../../window/base/Window/Window";
-//import IonImageryLayerForm from '../../../form/imageryLayer/IonImageryLayerForm';
 import GeoJsonDataSourceForm from '../../../form/dataSource/GeoJsonDataSourceForm';
-//import ImageryLayerFactory from '../../../../core/factory/imageryLayer/ImageryLayerFactory';
-//import ImageryLayerFormat from '../../../../core/format/imageryLayer/ImageryLayerFormat';
 import GeoJsonDataSourceFormat from '../../../../core/format/dataSource/GeoJsonDataSourceFormat';
-//import IonImageryProviderFormat from '../../../../core/format/imageryProvider/IonImageryProviderFormat';
 import { defined } from 'cesium';
 
 const NewGeoJsonDataSourceButton = ({
@@ -39,23 +36,16 @@ const NewGeoJsonDataSourceButton = ({
       * in the dialog
       */
      const onFinish = useCallback((values) => {
-        console.log(values);
+        const loadOptions = new GeoJsonDataSourceFormat().getLoadOptions(values);
+        const ds = new GeoJsonDataSource(values.name);
+        ds.show = values.show;
+        ds._loadOptions = loadOptions;
+        const dataSources = viewer.dataSources;
+        dataSources.add(ds);
         //hide window
         setInitialValues(null);
-        /*
-        //create layer
-        const layerFactory = new ImageryLayerFactory();
-        values.type = "Ion";
-        const layer = layerFactory.buildLayer(values);
-        if(defined(layerCollection)) {
-            layerCollection.add(layer);
-        }
-        else {
-            viewer && viewer.imageryLayers.add(layer);
-        }
-        */
 
-     }, []);
+     }, [viewer.dataSources]);
 
      return (
         <React.Fragment>

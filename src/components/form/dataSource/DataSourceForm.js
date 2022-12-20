@@ -55,7 +55,7 @@ const DataSourceForm = ({
             onClick={(e) => e.stopPropagation()}
             initialValues = {initialValues}
         >
-            <Tabs defaultActiveKey= {'GENERAL'} items={items}/>
+            <Tabs defaultActiveKey= {items[0].key} items={items}/>
             <Form.Item 
                 {...tailLayout}
             >

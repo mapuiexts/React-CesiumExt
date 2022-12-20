@@ -2,8 +2,10 @@ import React from 'react';
 import {Form, Checkbox, Input} from 'antd';
 
 const GeneralFormItems = ({
-    mode="new"
+    mode="new",
+    nameIsUpdatable
 }) => {
+    const nameIsReadOnly = (mode !== 'new' && !nameIsUpdatable) ? true : false;
 
     return (
         <React.Fragment>
@@ -12,7 +14,7 @@ const GeneralFormItems = ({
                 name="name"
                 label="Name"
             >
-                <Input/>
+                <Input readOnly={nameIsReadOnly}/>
             </Form.Item>
             {/* show */}
             <Form.Item

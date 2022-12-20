@@ -21,7 +21,7 @@ class DataSourceFormat {
      */
     writeJsonDefaultValues() {
         const json = {};
-        json.name = 'unnamed';
+        json.name = undefined;
         json.show = true;
         
         return json;
@@ -33,9 +33,9 @@ class DataSourceFormat {
      * @param {Cesium.DataSource} dataSource the cesium dataSource to be updated
      * @returns 
      */
-    readJson(json, dataSource) {
+    readJson(json, dataSource, nameIsUpdatable) {
         if(!defined(json)) return;
-        'name' in json && (dataSource.name = json.name);
+        nameIsUpdatable && 'name' in json && (dataSource.name = json.name);
         'show' in json && (dataSource.show = json.show);
     }
 

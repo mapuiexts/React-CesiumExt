@@ -41,7 +41,7 @@ class DataSourceTreeDataFormat {
             }
             const dsNode = {
                 key: key,
-                title: <DataSourceContextMenu viewer={viewer} dataSource={ds}><div>{name}</div></DataSourceContextMenu>,
+                title: <DataSourceContextMenu viewer={viewer} ds={ds}><div>{name}</div></DataSourceContextMenu>,
                 value: key,
                 dataSource: ds
             }

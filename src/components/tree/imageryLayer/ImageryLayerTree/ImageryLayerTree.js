@@ -30,19 +30,44 @@ const ImageryLayerTree = ({
         const flatArray = format.asFlatArray(treeData);
         console.log('flat array', flatArray);
         const visibleArray= flatArray.filter(node=> defined(node.layer) && node.layer.show === true);
-        const checkedKeys = visibleArray.map(node => node.key);
+        const checkedKeys = visibleArray.map(node => node.key).sort();
         console.log('checkedKeys', checkedKeys);
         return checkedKeys;
 
     }, []);
+
+    const isArraysEqual = (a, b) => {
+      if (a === b) return true;
+      if (a == null || b == null) return false;
+      if (a.length !== b.length) return false;
+    
+      // If you don't care about the order of the elements inside
+      // the array, you should sort both arrays here.
+      // Please note that calling sort on an array will modify that array.
+      // you might want to clone your array first.
+    
+      for (var i = 0; i < a.length; ++i) {
+          if (a[i] !== b[i]) return false;
+      }
+      return true;
+  };
 
     const rebuildTreeNodes = useCallback(() => {
         if(viewer) {
             const format = new ImageryLayerTreeDataFormat();
             const newTreeData = format.writeTreeDataLayer(viewer, rootName); 
             setCurrentTreeData(newTreeData);
+            setCheckedKeys((prevCheckedKeys) => {
+              const curCheckedKeys = getVisibleKeys(newTreeData);
+              if(isArraysEqual(prevCheckedKeys, curCheckedKeys)) {
+                  return prevCheckedKeys;
+              }
+              else {
+                  return curCheckedKeys;
+              }
+          });
         }
-    }, [viewer, rootName]);
+    }, [viewer, rootName, getVisibleKeys]);
 
     /**
        * The callback method to be called after the tree
