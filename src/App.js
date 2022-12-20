@@ -7,22 +7,21 @@ import DataSourceTree from './components/tree/dataSource/DataSourceTree/DataSour
 import defaultImageryLayers from './assets/imageryLayer/defaultImageryLayers.json';
 import belgiumImageryLayers from './assets/imageryLayer/belgiumImageryLayers.json';
 import ImageryLayerBuilder from './core/factory/imageryLayer/ImageryLayerBuilder';
-import OverlayTooltip from './components/overlay/tooltip/OverlayTooltip/OverlayTooltip';
+//import OverlayTooltip from './components/overlay/tooltip/OverlayTooltip/OverlayTooltip';
 import DrawPolylineButton from './components/button/common/draw/DrawPolylineButton/DrawPolylineButton';
 import DrawPolygonButton from './components/button/common/draw/DrawPolygonButton/DrawPolygonButton';
 import DrawPointButton from './components/button/common/draw/DrawPointButton/DrawPointButton';
 import DrawLabelButton from './components/button/common/draw/DrawLabelButton/DrawLabelButton';
 import WfsGetFeatureButton from './components/button/wfs/WfsGetFeatureButton/WfsGetFeatureButton';
-import WfsGetFeatureByPolygonButton from './components/button/wfs/WfsGetFeatureByPolygonButton/WfsGetFeatureByPolygonButton';
 
 import 'antd/dist/antd.min.css'; //https://github.com/ant-design/ant-design/issues/33327
 //import 'cesium/Widgets/widgets.css';
 import './App.css';
 
 const wfsUrl = 'https://geoservices.informatievlaanderen.be/overdrachtdiensten/Adressen/wfs';
-const wfsResourceOptions = {
-  url: 'https://geoservices.informatievlaanderen.be/overdrachtdiensten/Adressen/wfs'
-};
+// const wfsResourceOptions = {
+//   url: 'https://geoservices.informatievlaanderen.be/overdrachtdiensten/Adressen/wfs'
+// };
 const wfsOptions = {
   //srsName: 'urn:x-ogc:def:crs:EPSG:4326',
   srsName: 'EPSG:4326',
@@ -90,15 +89,15 @@ function App() {
     setViewer(aViewer);
   }, []);
 
-  const onClick = useCallback(() => {
-    console.log('overlay');
-    return (
-      <>
-      {/* <Button>Hi</Button> */}
-      <OverlayTooltip viewer={viewer} visible={true}><div>Hello</div></OverlayTooltip>
-      </>
-    );
-  }, [viewer]);
+  // const onClick = useCallback(() => {
+  //   console.log('overlay');
+  //   return (
+  //     <>
+  //     {/* <Button>Hi</Button> */}
+  //     <OverlayTooltip viewer={viewer} visible={true}><div>Hello</div></OverlayTooltip>
+  //     </>
+  //   );
+  // }, [viewer]);
 
   // const menu = (
   //   <Menu TabIndex={0}
