@@ -11,27 +11,10 @@ module.exports = {
       'cesium': path.resolve(__dirname, cesiumSource)
     },
     webpackConfig, //https://github.com/styleguidist/react-styleguidist/issues/1910, https://gist.github.com/nebomilic/938f93695b4ed6756fb37db757aca06f
-    dangerouslyUpdateWebpackConfig(webpackConfig, env) {
-      // WARNING: inspect Styleguidist Webpack config before modifying it, otherwise you may break Styleguidist
-      //console.log(webpackConfig)
-      // if(env === 'production') {
-      //   webpackConfig.plugins = [
-      //     webpackConfig.plugins[0],
-      //     webpackConfig.plugins[1],
-      //     webpackConfig.plugins[2],
-      //     webpackConfig.plugins[4],
-      //     webpackConfig.plugins[5],
-      //     webpackConfig.plugins[6],
-      //   ];
-
-      //   webpackConfig.output.sourcePrefix= '';
-      //   webpackConfig.devServer= { transportMode: 'ws' };
-      //   webpackConfig.devtool= 'eval-source-map';
-      //   delete webpackConfig.optimization;
-      // }
-      console.log(webpackConfig);
-      return webpackConfig
-    },
+    // dangerouslyUpdateWebpackConfig(webpackConfig, env) {
+    //   console.log(webpackConfig);
+    //   return webpackConfig
+    // },
     components: 'src/**/*.{js,jsx,tsx}',
     getExampleFilename(componentPath) {
       return componentPath.replace(/\.js?$/, '.md');
@@ -104,8 +87,49 @@ module.exports = {
       {
         name: 'UI Components',
         description: 'All the React-CesiumExt Components',
-        sectionDepth: 1,
+        sectionDepth: 3,
         sections: [
+          {
+            name: 'button',
+            sections:[
+              {
+                name: 'coordinate',
+                description: 'All the buttons to interact with coordinate position',
+                components: [
+                  'src/components/button/coordinate/**/*.{js,jsx,ts,tsx}'
+                ],
+                exampleMode: 'expand', 
+                usageMode: 'expand',
+              },
+              {
+                name: 'dataSource',
+                description: 'All the buttons to interact with Cesium DataSource',
+                components: [
+                  'src/components/button/dataSource/**/*.{js,jsx,ts,tsx}'
+                ],
+                exampleMode: 'expand', 
+                usageMode: 'expand',
+              },
+              {
+                name: 'draw',
+                description: 'All the buttons with functionality to draw Cesium entities',
+                components: [
+                  'src/components/button/draw/**/*.{js,jsx,ts,tsx}'
+                ],
+                exampleMode: 'expand', 
+                usageMode: 'expand',
+              },
+              {
+                name: 'imagery layer',
+                components: [
+                  'src/components/button/imageryLayer/**/*.{js,jsx,ts,tsx}'
+                ],
+                exampleMode: 'expand', 
+                usageMode: 'expand',
+              },
+              
+            ]
+          },
           {
             name: 'panel',
             //content: 'docs/ui.md',
@@ -120,6 +144,21 @@ module.exports = {
             exampleMode: 'expand', // 'hide' | 'collapse' | 'expand'
             usageMode: 'expand' // 'hide' | 'collapse' | 'expand'
           },
+          
+          {
+            name: 'grid',
+            sections:[
+              {
+                name: 'entity',
+                components: [
+                  'src/components/grid/entity/**/*.{js,jsx,ts,tsx}'
+                ],
+                exampleMode: 'expand', 
+                usageMode: 'expand' 
+              }
+            ]
+          },
+          
           {
             name: 'tree',
             sections:[
@@ -127,6 +166,14 @@ module.exports = {
                 name: 'imageryLayer',
                 components: [
                   'src/components/tree/imageryLayer/**/*.{js,jsx,ts,tsx}'
+                ],
+                exampleMode: 'expand', // 'hide' | 'collapse' | 'expand'
+                usageMode: 'expand' // 'hide' | 'collapse' | 'expand'
+              },
+              {
+                name: 'dataSource',
+                components: [
+                  'src/components/tree/dataSource/**/*.{js,jsx,ts,tsx}'
                 ],
                 exampleMode: 'expand', // 'hide' | 'collapse' | 'expand'
                 usageMode: 'expand' // 'hide' | 'collapse' | 'expand'

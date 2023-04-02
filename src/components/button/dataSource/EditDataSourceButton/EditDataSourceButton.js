@@ -1,4 +1,5 @@
 import {useState, useCallback} from 'react';
+import { defined } from 'cesium';
 import {Button} from 'antd';
 import Window from "../../../window/base/Window/Window";
 import EditDataSourceForm from '../../../form/dataSource/EditDataSourceForm';
@@ -39,7 +40,7 @@ const EditDataSourceButton = ({
         <>
             <Button onClick={onShowWindow} {...otherProps}>{children}</Button>
             {
-                visibleWnd &&
+                visibleWnd && defined(ds) &&
                 <Window
                     title={children}
                     collapsible

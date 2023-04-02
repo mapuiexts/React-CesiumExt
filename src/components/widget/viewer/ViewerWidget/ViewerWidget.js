@@ -1,4 +1,5 @@
 import React, { useRef, useEffect } from 'react';
+import { Spin } from 'antd';
 import PropTypes from 'prop-types';
 import {Viewer, defined} from 'cesium';
 import './ViewerWidget.css';
@@ -32,11 +33,18 @@ const ViewerWidget = ({
     }, [onStart, options]);
 
     return (
-        <div {...otherProps}
-             ref={viewerContainerRef}
-             className="react-cesiumext-viewer"
-        >
-            {children}
+        // <div {...otherProps}
+        //      ref={viewerContainerRef}
+        //      className="react-cesiumext-viewer"
+        // >
+        //     {children}
+        // </div>
+        <div className="react-cesiumext-viewer" {...otherProps}>
+            <div className="cesium-viewer">
+                <div ref={viewerContainerRef} className="cesium-viewer-cesiumWidgetContainer"/>
+                {defined(viewerRef.current) ? children : <Spin/>}
+                {/* <div className="cesium-viewer-bottom" ref={containerBottomRef}/> */}
+            </div>
         </div>
     );
 

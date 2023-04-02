@@ -15,7 +15,8 @@ class DataSourceTreeDataFormat {
      */
      writeTreeData(
         viewer, 
-        rootName = 'DataSources') {
+        rootName = 'DataSources',
+        menuPropsFunc = undefined) {
         
         const dataSources = viewer.dataSources;
         console.log ('datasources:', dataSources);
@@ -23,7 +24,9 @@ class DataSourceTreeDataFormat {
         const key = '_ROOT';
         const treeData = {
             key: key,
-            title: <DataSourceContextMenu viewer={viewer} ><strong onClick={(e) => e.preventDefault()}>{rootName}</strong></DataSourceContextMenu>,
+            title: <DataSourceContextMenu viewer={viewer} menuPropsFunc={menuPropsFunc} >
+                        <strong onClick={(e) => e.preventDefault()}>{rootName}</strong>
+                    </DataSourceContextMenu>,
             value: key,
             children: []
         };
@@ -41,7 +44,9 @@ class DataSourceTreeDataFormat {
             }
             const dsNode = {
                 key: key,
-                title: <DataSourceContextMenu viewer={viewer} ds={ds}><div>{name}</div></DataSourceContextMenu>,
+                title: <DataSourceContextMenu viewer={viewer} ds={ds} menuPropsFunc={menuPropsFunc}>
+                            <div>{name}</div>
+                        </DataSourceContextMenu>,
                 value: key,
                 dataSource: ds
             }

@@ -1,17 +1,25 @@
 import React, {useState, useCallback} from 'react';
+import PropTypes from 'prop-types';
 import {Button} from 'antd';
 import Window from "../../../window/base/Window/Window";
 import IonImageryLayerForm from '../../../form/imageryLayer/IonImageryLayerForm';
 import ImageryLayerFactory from '../../../../core/factory/imageryLayer/ImageryLayerFactory';
 import ImageryLayerFormat from '../../../../core/format/imageryLayer/ImageryLayerFormat';
 import IonImageryProviderFormat from '../../../../core/format/imageryProvider/IonImageryProviderFormat';
-import { defined } from 'cesium';
+import { defined, Viewer, CesiumWidget } from 'cesium';
 
+/**
+ * Component button to create a new Ion Imagery Layer.
+ * Once the user clicks this button, a window will be shown and the
+ * user will be able to add the parameters for the new layer creation.
+ * 
+ * @visibleName New Ion Imagery Layer
+ */
 const NewIonImageryLayerButton = ({
     viewer,
-    layerCollection,
     children,
     windowProps,
+    onCreate,
     ...otherProps
 }) => {
 
@@ -59,16 +67,12 @@ const NewIonImageryLayerButton = ({
         const layerFactory = new ImageryLayerFactory();
         values.type = "Ion";
         const layer = layerFactory.buildLayer(values);
-        if(defined(layerCollection)) {
-            layerCollection.add(layer);
-        }
-        else {
-            viewer && viewer.imageryLayers.add(layer);
-        }
+        defined(viewer) && viewer.imageryLayers.add(layer);
+        onCreate && onCreate(layer);
 
-     }, [layerCollection, viewer]);
+     }, [viewer, onCreate]);
 
-     return (
+    return (
         <React.Fragment>
             <Button onClick={onShowWindow} {...otherProps}>{children}</Button>
             {
@@ -88,6 +92,39 @@ const NewIonImageryLayerButton = ({
             }
         </React.Fragment>
      );
+};
+
+NewIonImageryLayerButton.propTypes = {
+    /**
+     * The Cesium Viewer on where the Wms Imagery
+     * Layer will be created.
+     */
+    viewer: PropTypes.PropTypes.oneOfType([
+        PropTypes.instanceOf(Viewer),
+        PropTypes.instanceOf(CesiumWidget)
+    ]),
+
+    /**
+     * The properties for the window component 
+     * that is show for the creation of the layer.
+     * See  components.window.base.Window for more
+     * details about the available properties.
+     */
+    windowProps: PropTypes.object,
+
+    /**
+     * Handler function called once the
+     * new layer is created.
+     * This function will have the new layer as
+     * parameter.
+     */
+    onCreate: PropTypes.func,
+
+    /**
+     * The button children: text or JSX element.
+     */
+    children: PropTypes.node
+
 };
 
 export default NewIonImageryLayerButton;

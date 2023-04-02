@@ -14,16 +14,19 @@ class GeoJsonDataSourceFormat extends DataSourceFormat {
         if(defined(dataSource._loadOptions)) {
             json._loadOptions = {};
             json._loadOptions.clampToGround = dataSource._loadOptions.clampToGround;
-            //json._loadOptions.fill = dataSource._loadOptions.fill.toCssHexString();
-            const red = dataSource._loadOptions.fill.red;
-            const green = dataSource._loadOptions.fill.green;
-            const blue = dataSource._loadOptions.fill.blue;
-            json._loadOptions.fill = new Color(red, green, blue, 1.0).toCssHexString();
-            json._loadOptions.alphaFill = dataSource._loadOptions.fill.alpha;
-            json._loadOptions.markerColor = dataSource._loadOptions.markerColor.toCssHexString();
+            
+            if(defined(dataSource._loadOptions.fill)) {
+                const red = dataSource._loadOptions.fill.red;
+                const green = dataSource._loadOptions.fill.green;
+                const blue = dataSource._loadOptions.fill.blue;
+                json._loadOptions.fill = new Color(red, green, blue, 1.0).toCssHexString();
+                json._loadOptions.alphaFill = dataSource._loadOptions.fill.alpha;
+            }
+
+            json._loadOptions.markerColor = dataSource._loadOptions.markerColor?.toCssHexString();
             json._loadOptions.markerSize = dataSource._loadOptions.markerSize;
             json._loadOptions.markerSymbol = dataSource._loadOptions.markerSymbol;
-            json._loadOptions.stroke = dataSource._loadOptions.stroke.toCssHexString();
+            json._loadOptions.stroke = dataSource._loadOptions.stroke?.toCssHexString();
             json._loadOptions.strokeWidth = dataSource._loadOptions.strokeWidth;
         }
 
@@ -38,7 +41,7 @@ class GeoJsonDataSourceFormat extends DataSourceFormat {
         const json = super.writeJsonDefaultValues();
         
         json._loadOptions = {};
-        json._loadOptions.clampToGround = false;
+        json._loadOptions.clampToGround = true;
         json._loadOptions.fill = Color.YELLOW.toCssHexString();
         json._loadOptions.alphaFill = 0.6;
         json._loadOptions.markerColor = Color.ROYALBLUE.toCssHexString();
@@ -59,6 +62,7 @@ class GeoJsonDataSourceFormat extends DataSourceFormat {
         super.readJson(json, dataSource, true);
         
         if(!defined(json) && !defined(json._loadOptions)) return;
+        if(!defined(dataSource._loadOptions)) dataSource._loadOptions = {};
         'clampToGround' in json._loadOptions && (dataSource._loadOptions.clampToGround = json._loadOptions.clampToGround);
         'fill' in json._loadOptions 
             && (dataSource._loadOptions.fill = Color.fromAlpha(Color.fromCssColorString(json._loadOptions.fill, dataSource._loadOptions.fill), json._loadOptions.alphaFill, dataSource._loadOptions.fill) );

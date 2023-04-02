@@ -3,11 +3,15 @@ import { isString } from "../../type/type";
 
 class WfsGetFeatureOptionsFormat {
 
+    writeJson(json) {
+        return json;
+    }
+
     /**
      * Provides a json object with the default values
      * @returns json with default values
      */
-    writeJsonDefaultValuese() {
+    writeJsonDefaultValues() {
         const json = {
             srsName: 'EPSG:4326',
             maxFeatures: 2000,

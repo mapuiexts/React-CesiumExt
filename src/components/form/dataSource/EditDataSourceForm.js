@@ -1,10 +1,13 @@
 import {useCallback} from 'react';
 import {GeoJsonDataSource, CzmlDataSource, GpxDataSource, defined} from 'cesium';
+import WfsGeoJsonDataSource from '../../../core/packages/engine/DataSources/WfsGeoJsonDataSource';
 import DataSourceForm from './DataSourceForm';
+import WfsGeoJsonDataSourceForm from './WfsGeoJsonDataSourceForm';
 import GeoJsonDataSourceForm from './GeoJsonDataSourceForm';
 import GpxDataSourceForm from './GpxDataSourceForm';
 import CzmlDataSourceForm from './CzmlDataSourceForm';
 import DataSourceFormat from '../../../core/format/dataSource/DataSourceFormat';
+import WfsGeoJsonDataSourceFormat from '../../../core/format/dataSource/WfsGeoJsonDataSourceFormat';
 import GeoJsonDataSourceFormat from '../../../core/format/dataSource/GeoJsonDataSourceFormat';
 import GpxDataSourceFormat from '../../../core/format/dataSource/GpxDataSourceFormat';
 import CzmlDataSourceFormat from '../../../core/format/dataSource/CzmlDataSourceFormat';
@@ -22,7 +25,11 @@ const EditDataSourceForm = ({
    
     console.log('ds', ds);
     if(defined(ds)) {
-        if(ds instanceof GeoJsonDataSource ) {
+        if(ds instanceof WfsGeoJsonDataSource ) {
+            DSForm = WfsGeoJsonDataSourceForm;
+            format = new WfsGeoJsonDataSourceFormat();
+        }
+        else if (ds instanceof GeoJsonDataSource ) {
             DSForm = GeoJsonDataSourceForm;
             format = new GeoJsonDataSourceFormat();
         }

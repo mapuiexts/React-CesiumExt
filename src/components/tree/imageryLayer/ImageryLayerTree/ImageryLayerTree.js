@@ -1,19 +1,22 @@
 import {useCallback, useState, useEffect} from 'react';
+import PropTypes from 'prop-types';
 import {Tree} from 'antd';
-import {defined} from 'cesium';
+import {defined, Viewer, CesiumWidget} from 'cesium';
 import ImageryLayerTreeDataFormat from '../../../../core/format/imageryLayerTree/ImageryLayerTreeDataFormat';
 
 /**
- * The tree to show the imagery layers.
+ * The tree to show the imagery layers 
+ * present in the Cesium Viewer.
  * 
  * @visibleName Imagery Layer Tree
  */
 const ImageryLayerTree = ({
     viewer,
 	  rootName,
-    checkable = true,
     onExpand = false,
+    selectable = false,
     onCheck,
+    menuPropsFunc,
     ...otherProps
 }) => {
 
@@ -55,7 +58,7 @@ const ImageryLayerTree = ({
     const rebuildTreeNodes = useCallback(() => {
         if(viewer) {
             const format = new ImageryLayerTreeDataFormat();
-            const newTreeData = format.writeTreeDataLayer(viewer, rootName); 
+            const newTreeData = format.writeTreeDataLayer(viewer, rootName, menuPropsFunc); 
             setCurrentTreeData(newTreeData);
             setCheckedKeys((prevCheckedKeys) => {
               const curCheckedKeys = getVisibleKeys(newTreeData);
@@ -67,7 +70,7 @@ const ImageryLayerTree = ({
               }
           });
         }
-    }, [viewer, rootName, getVisibleKeys]);
+    }, [viewer, rootName, getVisibleKeys, menuPropsFunc]);
 
     /**
        * The callback method to be called after the tree
@@ -186,13 +189,50 @@ const ImageryLayerTree = ({
         <Tree
             {...otherProps}
             treeData={currentTreeData}
-            checkable={checkable}
+            checkable={true}
+            selectable={selectable}
             //onExpand={onExpandTree}
             onCheck = {onInternalCheck}
             checkedKeys={checkedKeys} 
         />
     );
 
+};
+
+ImageryLayerTree.propTypes = {
+  /**
+   * The Cesium Viewer with the collection of layers.
+   */
+  viewer: PropTypes.oneOfType([
+    PropTypes.instanceOf(Viewer),
+    PropTypes.instanceOf(CesiumWidget)
+  ]), 
+  /**
+   * The root name in the tree view
+   * for the layers
+   */
+  rootName: PropTypes.string,
+ 
+  /**
+   * @ignore
+   */
+  onExpand: PropTypes.bool,
+
+  /**
+   * Event handler called once the user checks a 
+   * checkbox in the layer tree
+   */
+  onCheck: PropTypes.func,
+
+  /**
+   * function used to build the menu context.
+   * If not provided, a default menu context will
+   * be provided for the tree layer.
+   * This function receives as parameter the
+   * Cesium Viewer and Imagery Layer and should
+   * returns the antd menu props.
+   */
+  menuPropsFunc: PropTypes.func,
 };
 
 export default ImageryLayerTree;

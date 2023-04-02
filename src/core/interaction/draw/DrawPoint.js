@@ -1,4 +1,4 @@
-import { Entity, PointGraphics, HeightReference, CallbackProperty, Color, defined } from 'cesium';
+import { Entity, PointGraphics, HeightReference, CallbackProperty, Color } from 'cesium';
 import Draw from './Draw';
 
 

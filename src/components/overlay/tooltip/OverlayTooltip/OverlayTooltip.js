@@ -12,8 +12,8 @@ import './OverlayTooltip.css';
 const OverlayTooltip = ({
     viewer,
     visible = false,
-    offsetX = 10,
-    offsetY = -10,
+    offsetX = 0,
+    offsetY = -20,
     children,
     ...otherProps
 }) => {
@@ -77,7 +77,9 @@ const OverlayTooltip = ({
             <div autoFocus {...otherProps} style={style} ref={tooltipRef} className="rcesiumext-overlay-tooltip"> 
                 {children}
             </div>,
-            document.querySelector('body')
+            viewer.canvas.parentNode
+            //document.querySelector('body')
+            //document.querySelector('canvas')
         )
     );
 }

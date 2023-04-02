@@ -1,41 +1,42 @@
 import React, {useState, useCallback} from 'react';
+import PropTypes from 'prop-types';
 import {Button} from 'antd';
 import Window from "../../../window/base/Window/Window";
-import OpenStreetMapImageryLayerForm from '../../../form/imageryLayer/OpenStreetMapImageryLayerForm';
-import OpenStreetMapProviderFormItems from '../../../form/imageryLayer/items/provider/OpenStreetMapProviderFormItems';
-import ProviderFormItems from '../../../form/imageryLayer/items/provider/ProviderFormItems';
+import WebMapServiceImageryLayerForm from '../../../form/imageryLayer/WebMapServiceImageryLayerForm';
 import ImageryLayerFactory from '../../../../core/factory/imageryLayer/ImageryLayerFactory';
 import ImageryLayerFormat from '../../../../core/format/imageryLayer/ImageryLayerFormat';
-import OpenStreetMapImageryProviderFormat from '../../../../core/format/imageryProvider/OpenStreetMapImageryProviderFormat';
-import './NewOpenStreetMapImageryLayerButton.css';
-import { defined } from 'cesium';
+import WebMapServiceImageryProviderFormat from '../../../../core/format/imageryProvider/WebMapServiceImageryProviderFormat';
+import { defined, Viewer, CesiumWidget } from 'cesium';
 
-const NewOpenStreetMapImageryLayerButton = ({
+/**
+ * Component button to create a new WebMapService Imagery Layer.
+ * Once the user clicks this button, a window will be shown and the
+ * user will be able to add the parameters for the new layer creation.
+ * 
+ * @visibleName New Wms Imagery Layer
+ */
+const NewWmsImageryLayerButton = ({
     viewer,
-    layerCollection,
     children,
     windowProps,
     ...otherProps
 }) => {
-
-    
-
     const [initialValues, setInitialValues] = useState(null);
 
-    const getDefaultValues = () => {
-        const imageryProviderFormat = new OpenStreetMapImageryProviderFormat();
+    const getDefaultValues = useCallback(() => {
+        const imageryProviderFormat = new WebMapServiceImageryProviderFormat();
         const providerOpts = imageryProviderFormat.writeJsonDefaultValues();
         const layerFormat = new ImageryLayerFormat();
         const layerOpts = layerFormat.writeJsonDefaultValues(providerOpts);
         
         return(
             {
-                title: 'OSM',
+                title: 'New WMS Layer',
                 options: layerOpts,
                 provider: providerOpts
             }
         );
-    }
+    }, []);
 
      /**
       * Handler to close the Window once the OK button
@@ -57,27 +58,23 @@ const NewOpenStreetMapImageryLayerButton = ({
       * in the dialog
       */
      const onFinish = useCallback((values) => {
-        console.log(values);
+        
+        const imageryProviderFormat = new WebMapServiceImageryProviderFormat();
         if(!defined(values.provider)) {
-            values.provider = {
-                ...OpenStreetMapProviderFormItems.defaultValues,
-                ...ProviderFormItems.defaultValues
-            };
+            values.provider = imageryProviderFormat.writeJsonDefaultValues();
         }
+        imageryProviderFormat.formatJson(values.provider);
+        if(!defined(values.options)) values.options = {};
+        console.log(values);
         //hide window
         setInitialValues(null);
         //create layer
         const layerFactory = new ImageryLayerFactory();
-        values.type = "OpenStreetMap";
+        values.type = "WebMapService";
         const layer = layerFactory.buildLayer(values);
-        if(defined(layerCollection)) {
-            layerCollection.add(layer);
-        }
-        else {
-            viewer && viewer.imageryLayers.add(layer);
-        }
-
-     }, [layerCollection, viewer]);
+       
+        defined(viewer) && viewer.imageryLayers.add(layer);
+     }, [viewer]);
 
      return (
         <React.Fragment>
@@ -91,7 +88,7 @@ const NewOpenStreetMapImageryLayerButton = ({
                     visible={defined(initialValues)}
                     {...windowProps} 
                 >
-                    <OpenStreetMapImageryLayerForm
+                    <WebMapServiceImageryLayerForm
                         initialValues={initialValues}
                         onFinish={onFinish}
                     />
@@ -101,4 +98,29 @@ const NewOpenStreetMapImageryLayerButton = ({
      );
 };
 
-export default NewOpenStreetMapImageryLayerButton;
+NewWmsImageryLayerButton.propTypes = {
+    /**
+     * The Cesium Viewer on where the Wms Imagery
+     * Layer will be created.
+     */
+    viewer: PropTypes.PropTypes.oneOfType([
+        PropTypes.instanceOf(Viewer),
+        PropTypes.instanceOf(CesiumWidget)
+    ]),
+
+    /**
+     * The properties for the window component 
+     * that is show for the creation of the layer.
+     * See  components.window.base.Window for more
+     * details about the available properties.
+     */
+    windowProps: PropTypes.object,
+
+    /**
+     * The button children: text or JSX element.
+     */
+    children: PropTypes.node
+
+};
+
+export default NewWmsImageryLayerButton;

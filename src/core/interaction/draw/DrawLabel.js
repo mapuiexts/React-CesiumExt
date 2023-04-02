@@ -1,4 +1,4 @@
-import { Entity, LabelGraphics, HeightReference, CallbackProperty, Color, defined } from 'cesium';
+import { Entity, LabelGraphics, HeightReference, CallbackProperty, Color } from 'cesium';
 import Draw from './Draw';
 
 
@@ -12,7 +12,7 @@ class DrawLabel extends Draw {
         viewer, 
         entities, 
         text,
-        labelOptions = {
+        labelGraphicsOptions = {
             text: text,
             font: '30px sans-serif',
             fillColor : Color.RED,
@@ -24,7 +24,7 @@ class DrawLabel extends Draw {
     ) {
         super(viewer, entities, 1, 1);
         this._viewer = viewer;
-        this._labelOptions = labelOptions;
+        this._labelOptions = labelGraphicsOptions;
         this._labelVertices = [];
         this._numberOfAddedPositions = 0;
         //event handlers

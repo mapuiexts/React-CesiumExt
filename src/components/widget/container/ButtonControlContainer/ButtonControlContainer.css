@@ -6,4 +6,10 @@
     /* width: 29px;
     height: 29px; */
     overflow: hidden;
+    display: table;
+}
+
+.react-cesiumext-button-control-container .ant-btn-primary[disabled] {
+    color: rgba(50, 50, 50, .5);
+    background-color: rgba(250, 250, 250, .5);
 }

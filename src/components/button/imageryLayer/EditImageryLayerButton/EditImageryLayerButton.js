@@ -1,8 +1,17 @@
 import {useState, useCallback} from 'react';
+import PropTypes from 'prop-types';
 import {Button} from 'antd';
+import { ImageryLayer } from 'cesium';
 import Window from "../../../window/base/Window/Window";
 import EditImageryLayerForm from '../../../form/imageryLayer/EditImageryLayerForm';
 
+/**
+ * Component button to edit a Imagery Layer.
+ * Once the user clicks this button, a window will be shown and the
+ * user will be able to edit the imagery layer properties.
+ * 
+ * @visibleName Edit Imagery Layer
+ */
 const EditImageryLayerButton = ({
     layer,
     windowProps,
@@ -55,6 +64,26 @@ const EditImageryLayerButton = ({
             }
         </>
     );
+};
+
+EditImageryLayerButton.propTypes = {
+    /**
+     * The Cesium ImageryLayer to be edited
+     */
+    layer: PropTypes.instanceOf(ImageryLayer),
+
+    /**
+     * The properties for the window component 
+     * that is show for the update of the layer.
+     * See  components.window.base.Window for more
+     * details about the available properties.
+     */
+    windowProps: PropTypes.object,
+
+    /**
+     * The button children: text or JSX element.
+     */
+    children: PropTypes.node
 };
 
 export default EditImageryLayerButton;

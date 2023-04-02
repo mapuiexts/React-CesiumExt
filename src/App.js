@@ -1,6 +1,6 @@
 import { useCallback, useState } from 'react';
 //import { Button, Menu, Dropdown, Space  } from 'antd';
-import { Ion, createWorldTerrain, /*createOsmBuildings,*/ Cartesian3, Cesium3DTileset, /*IonResource*/ } from "cesium";
+import { Ion, createWorldTerrain, defined, /*createOsmBuildings,*/ Cartesian3, Cesium3DTileset, /*IonResource*/ } from "cesium";
 import ViewerWidget from './components/widget/viewer/ViewerWidget/ViewerWidget';
 import ImageryLayerTree from './components/tree/imageryLayer/ImageryLayerTree/ImageryLayerTree';
 import DataSourceTree from './components/tree/dataSource/DataSourceTree/DataSourceTree';
@@ -8,27 +8,26 @@ import defaultImageryLayers from './assets/imageryLayer/defaultImageryLayers.jso
 import belgiumImageryLayers from './assets/imageryLayer/belgiumImageryLayers.json';
 import ImageryLayerBuilder from './core/factory/imageryLayer/ImageryLayerBuilder';
 //import OverlayTooltip from './components/overlay/tooltip/OverlayTooltip/OverlayTooltip';
-import DrawPolylineButton from './components/button/common/draw/DrawPolylineButton/DrawPolylineButton';
-import DrawPolygonButton from './components/button/common/draw/DrawPolygonButton/DrawPolygonButton';
-import DrawPointButton from './components/button/common/draw/DrawPointButton/DrawPointButton';
-import DrawLabelButton from './components/button/common/draw/DrawLabelButton/DrawLabelButton';
 import WfsGetFeatureButton from './components/button/wfs/WfsGetFeatureButton/WfsGetFeatureButton';
 
 import 'antd/dist/antd.min.css'; //https://github.com/ant-design/ant-design/issues/33327
 //import 'cesium/Widgets/widgets.css';
 import './App.css';
+import TrackCoordinateButton from './components/button/coordinate/TrackCoordinateButton/TrackCoordinateButton';
 
+//https://geo.api.vlaanderen.be/Adressenregister/wfs?service=WFS&request=getcapabilities
 const wfsUrl = 'https://geoservices.informatievlaanderen.be/overdrachtdiensten/Adressen/wfs';
+//const wfsUrl = 'https://geoservices.informatievlaanderen.be/overdrachtdiensten/Gebouwenregister/wfs'
 // const wfsResourceOptions = {
 //   url: 'https://geoservices.informatievlaanderen.be/overdrachtdiensten/Adressen/wfs'
 // };
 const wfsOptions = {
   //srsName: 'urn:x-ogc:def:crs:EPSG:4326',
   srsName: 'EPSG:4326',
-  featureNS: 'informatievlaanderen.be/Adressen',
-  featurePrefix: 'Adressen',
-  featureTypes: ['Adrespos'],
-  geometryName: 'adrespositie',
+  featureNS: 'informatievlaanderen.be/Adressen', //informatievlaanderen.be/Gebouwenregister
+  featurePrefix: 'Adressen', //Gebouwenregister
+  featureTypes: ['Adrespos'], //['Gebouw']
+  geometryName: 'adrespositie', //Geometrie
   outputFormat: 'application/json',
   maxFeatures: 200
 };
@@ -126,19 +125,16 @@ function App() {
       <div style={{display:'flex'}}>
         {/* <Button type="primary" onClick={onClick}>test</Button> */}
         {
-          viewer &&
+          defined(viewer) &&
         <>
-          <DrawPolylineButton viewer={viewer} type="primary">Draw Polyline</DrawPolylineButton>
-          <DrawPolygonButton viewer={viewer} type="primary">Draw Polygon</DrawPolygonButton>
-          <DrawPointButton viewer={viewer} type="primary">Draw Point</DrawPointButton>
-          <DrawLabelButton viewer={viewer} text="React-CesiumExt" type="primary">Draw Label</DrawLabelButton>
           <WfsGetFeatureButton url={wfsUrl} wfsOptions={wfsOptions} >Get Feature</WfsGetFeatureButton>
+          <TrackCoordinateButton viewer={viewer}>TrackCoordinate</TrackCoordinateButton>
           {/* <WfsGetFeatureByPolygonButton viewer={viewer} wfsResourceOptions={wfsResourceOptions} wfsOptions={wfsOptions} >Get Feature by Polygon</WfsGetFeatureByPolygonButton> */}
         </>
         }
       </div>
       <div style={{display:'flex', flexDirection:'row'}}>
-        <ViewerWidget options={viewerOpts} onStart={onStart} style={{width:'80%'}}/>
+        <ViewerWidget options={viewerOpts} onStart={onStart} style={{width:'80%', height:'80vh'}}/>
         <div  style={{display:'flex', flexDirection:'column'}}>
           <ImageryLayerTree viewer={viewer} rootName="Imagery Layers" />
           <DataSourceTree viewer={viewer} rootName="Data Sources" />

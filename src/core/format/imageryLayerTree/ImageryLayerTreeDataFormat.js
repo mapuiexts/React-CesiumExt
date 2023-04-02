@@ -15,14 +15,15 @@ class ImageryLayerTreeDataFormat {
      */
      writeTreeDataLayer(
         viewer, 
-        rootName = 'Imagery Layers') {
+        rootName = 'Imagery Layers',
+        menuPropsFunc = undefined) {
         
         const layerCollection = viewer.imageryLayers;
         //create the root group layer
         const key = '_ROOT';
         const treeData = {
             key: key,
-            title: <ImageryLayerContextMenu viewer={viewer} ><strong>{rootName}</strong></ImageryLayerContextMenu>,
+            title: <ImageryLayerContextMenu viewer={viewer} menuPropsFunc={menuPropsFunc} ><strong>{rootName}</strong></ImageryLayerContextMenu>,
             value: key,
             children: []
         };
@@ -40,7 +41,7 @@ class ImageryLayerTreeDataFormat {
             }
             const layerNode = {
                 key: key,
-                title: <ImageryLayerContextMenu viewer={viewer} layer={layer}><div>{title}</div></ImageryLayerContextMenu>,
+                title: <ImageryLayerContextMenu viewer={viewer} layer={layer} menuPropsFunc={menuPropsFunc}><div>{title}</div></ImageryLayerContextMenu>,
                 value: key,
                 layer: layer
             }

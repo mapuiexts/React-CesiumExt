@@ -9,6 +9,7 @@ class DataSourceFormat {
      */
     writeJson(dataSource) {
         const json = {};
+        if(!defined(dataSource)) return json;
         json.name = dataSource.name;
         json.show = dataSource.show;
 

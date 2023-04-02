@@ -18,7 +18,7 @@ const IonProviderFormItems = ({
                         },
                     ]}
                 >
-                    <InputNumber allowClear/>
+                    <InputNumber/>
                 </Form.Item>
             },
             {/* access token */}

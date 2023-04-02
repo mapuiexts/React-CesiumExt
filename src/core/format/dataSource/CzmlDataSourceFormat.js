@@ -4,11 +4,11 @@ class CzmlDataSourceFormat extends DataSourceFormat {
 
     /**
      * Convert a Cesium CzmlDataSource to a json object,
-     * @param {Cesium.GeoJsonDataSource} dataSource 
-     * @returns a Json object representing the GeoJson dataSource
+     * @param {Cesium.CzmlDataSource} dataSource 
+     * @returns a Json object representing the Czml dataSource
      */
-    writeJson() {
-        const json = super.writeJson();
+    writeJson(dataSource) {
+        const json = super.writeJson(dataSource);
         return json;
     }
 
@@ -24,7 +24,7 @@ class CzmlDataSourceFormat extends DataSourceFormat {
     /**
      * Read the json object and update the GeoJson dataSource
      * @param {Object} json the json object to be read
-     * @param {Cesium.GeoJsonDataSource} dataSource the cesium GeoJson dataSource to be updated
+     * @param {Cesium.CzmlDataSource} dataSource the cesium Czml dataSource to be updated
      */
     readJson(json, dataSource) {
         super.readJson(json, dataSource, false);

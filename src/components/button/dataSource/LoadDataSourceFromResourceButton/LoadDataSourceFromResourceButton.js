@@ -26,7 +26,12 @@ const LoadDataSourceByResourceButton = ({
       * Handler to show the Window once the button is Clicked
       */
      const onShowWindow = () => {
-        setInitialValues({url: undefined, queryParameters:undefined});
+        setInitialValues({
+            resource: {
+                url: undefined, 
+                queryParameters:undefined
+            }
+        });
     };
 
     /**
@@ -39,11 +44,11 @@ const LoadDataSourceByResourceButton = ({
         setInitialValues(null);
         //load datasource by resource
         const loadOptions = ds._loadOptions;
-        console.log('url:', values.url);
+        console.log('url:', values.resource.url);
         const resource = new Resource({
-            url: values.url,
-            headers: defined(values.headers) ? JSON.parse(values.headers) : undefined,
-            queryParameters: defined(values.queryParameters) ? JSON.parse(values.queryParameters) : undefined
+            url: values.resource.url,
+            headers: defined(values.resource.headers) ? JSON.parse(values.resource.headers) : undefined,
+            queryParameters: defined(values.resource.queryParameters) ? JSON.parse(values.resource.queryParameters) : undefined
         })
         ds.load(resource, loadOptions).then((dataSource => {
             viewer && viewer.flyTo(dataSource.entities);

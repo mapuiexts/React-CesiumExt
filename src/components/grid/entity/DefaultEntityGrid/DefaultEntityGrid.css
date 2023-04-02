@@ -1,0 +1,18 @@
+.rcesiumext-defaultentitygrid {
+    display: flex;
+    flex-flow: column;
+    height: 100%;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.rcesiumext-defaultentitygrid-menubar-container {
+    flex: 0 1 auto;
+    margin-bottom: 0.2rem;
+    margin-top: 0.2rem;
+    margin-left: 0.2rem;
+}
+
+.rcesiumext-defaultentitygrid-content-container {
+    flex: 1 1 auto;
+}

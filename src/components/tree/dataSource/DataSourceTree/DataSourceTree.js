@@ -1,11 +1,13 @@
 import {useCallback, useState, useEffect} from 'react';
+import PropTypes from 'prop-types';
 import {Tree} from 'antd';
-import {defined} from 'cesium';
+import {defined, Viewer} from 'cesium';
 import DataSourceTreeDataFormat from '../../../../core/format/dataSourceTree/DataSourceTreeDataFormat';
 
 
 /**
- * The tree to show the data sources.
+ * The tree to show the data sources present
+ * in the Cesium Viewer
  * 
  * @visibleName DataSource Tree
  */
@@ -16,6 +18,7 @@ const DataSourceTree = ({
     onExpand = false,
     selectable = false,
     onCheck,
+    menuPropsFunc,
     ...otherProps
 }) => {
 
@@ -62,7 +65,7 @@ const DataSourceTree = ({
         if(viewer) {
            
             const format = new DataSourceTreeDataFormat();
-            const newTreeData = format.writeTreeData(viewer, rootName); 
+            const newTreeData = format.writeTreeData(viewer, rootName, menuPropsFunc); 
             setCurrentTreeData(newTreeData);
             setCheckedKeys((prevCheckedKeys) => {
                 const curCheckedKeys = getVisibleKeys(newTreeData);
@@ -74,7 +77,7 @@ const DataSourceTree = ({
                 }
             });
         }
-    }, [viewer, rootName, getVisibleKeys]);
+    }, [viewer, rootName, getVisibleKeys, menuPropsFunc]);
 
     // const rebuildTreeNodes = useCallback(() => {
     //     if(viewer) {
@@ -221,11 +224,46 @@ const DataSourceTree = ({
 
             treeData={currentTreeData}
             checkable={checkable}
+            //selectable={selectable}
             //onExpand={onExpandTree}
             onCheck = {onInternalCheck}
             checkedKeys={checkedKeys} 
         />
     );
 };
+
+DataSourceTree.propTypes = {
+    /**
+     * The Cesium Viewer with the collection of layers.
+     */
+    viewer: PropTypes.instanceOf(Viewer),
+ 
+    /**
+     * The root name in the tree view
+     * for the layers
+     */
+    rootName: PropTypes.string,
+   
+    /**
+     * @ignore
+     */
+    onExpand: PropTypes.bool,
+  
+    /**
+     * Event handler called once the user checks a 
+     * checkbox in the layer tree
+     */
+    onCheck: PropTypes.func,
+  
+    /**
+     * function used to build the menu context.
+     * If not provided, a default menu context will
+     * be provided for the dataSource.
+     * This function receives as parameter the
+     * Cesium Viewer and DataSource
+     * returns the antd menu props.
+     */
+    menuPropsFunc: PropTypes.func,
+  };
 
 export default DataSourceTree;

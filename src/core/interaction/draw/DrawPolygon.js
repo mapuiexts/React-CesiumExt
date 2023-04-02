@@ -1,4 +1,4 @@
-import { PolylineGraphics, PolygonGraphics, PolygonHierarchy, CallbackProperty, Color } from 'cesium';
+import { Entity, PolylineGraphics, PolygonGraphics, PolygonHierarchy, CallbackProperty, Color } from 'cesium';
 import Draw from './Draw';
 
 
@@ -15,20 +15,20 @@ class DrawPolygon extends Draw {
         entities, 
         minNumberOfPositions = 3,
         maxNumberOfPositions = null,
-        polygonOptions = {
+        polygonGraphicsOptions = {
             material: Color.RED.withAlpha(0.3),
             outline: true,
             outlineColor: Color.BLUE
         },
-        outlineOptions = {
-            material: Color.RED,
+        outlineGraphicsOptions = {
+            material: Color.BLUE,
         }
         
     ) {
         super(viewer, entities, minNumberOfPositions, maxNumberOfPositions);
         this._viewer = viewer;
-        this._polygonOptions = polygonOptions;
-        this._outlineOptions = outlineOptions;
+        this._polygonOptions = polygonGraphicsOptions;
+        this._outlineOptions = outlineGraphicsOptions;
 
         this._positionsInteraction = null;
         this._vertices = [];
@@ -87,8 +87,9 @@ class DrawPolygon extends Draw {
         const clonedPositions = this._vertices.slice(0);
 		const graphics = this._entity.polygon;
         graphics.hierarchy = new PolygonHierarchy(clonedPositions);
+        const resultEntity = new Entity({polygon: graphics});
 		
-		return graphics;
+		return resultEntity;
     }
 
     /**

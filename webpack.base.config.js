@@ -64,6 +64,12 @@ module.exports = {
     //devtool: 'eval-source-map', //https://stackoverflow.com/questions/61767538/devtools-failed-to-load-sourcemap-for-webpack-node-modules-js-map-http-e
     resolve: {
         extensions: ['.ts', '.tsx', '.js', '.json' ],
+        fallback: {
+          https: require.resolve("https-browserify"),
+          zlib: require.resolve("browserify-zlib"),
+          stream: require.resolve("stream-browserify"),
+          http: require.resolve("stream-http")
+        },
 
         alias: {
             //cesium: path.resolve(__dirname, cesiumSource)
@@ -110,6 +116,17 @@ module.exports = {
             //     use: [ 'url-loader' ]
             // },
 
+            // {
+            //   test: /\.(jpe?g|png|gif|ico)$/i,
+            //   type: 'asset/resource',
+            //   generator: {
+            //     filename: 'img/[name].[ext]'
+            //   }
+            // },
+            // {
+            //   test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/,
+            //   type: 'asset/resource'
+            // },
             {
                 test: /\.(ttf|eot|svg|kml)(\?v=[0-9]\.[0-9]\.[0-9])?$/,
                 type: 'asset/resource'
@@ -139,7 +156,7 @@ module.exports = {
                 {from: path.join(cesiumSource, 'Assets'), to: path.join(cesiumPath, "Assets")},
                 {from: path.join(cesiumSource, 'ThirdParty'), to: path.join(cesiumPath, 'ThirdParty')},
                 {from: path.join(cesiumSource, 'Widgets'), to: path.join(cesiumPath, 'Widgets')},
-                {from: path.join(cesiumSource, 'Workers'), to: path.join(cesiumPath, 'Workers')},
+                //{from: path.join(cesiumSource, 'Workers'), to: path.join(cesiumPath, 'Workers')},
                 {from: path.join(cesiumSource, '../Build/Cesium/ThirdParty/Workers'), to: path.join(cesiumPath, 'ThirdParty/Workers'), force: true},
                 {from: path.join(cesiumSource, '../Build/Cesium/Workers'), to: path.join(cesiumPath, 'Workers'), force: true}
                 // {
@@ -160,11 +177,7 @@ module.exports = {
                 // }
             ]
         }),
-
-        
-        
-
-        
+         
     ],
     //mode: 'development',
 };

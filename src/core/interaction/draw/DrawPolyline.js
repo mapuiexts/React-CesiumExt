@@ -1,11 +1,11 @@
-import { PolylineGraphics, CallbackProperty, Color, defined } from 'cesium';
+import { PolylineGraphics, CallbackProperty, Entity, Color } from 'cesium';
 import Draw from './Draw';
 
 
 /**
  * Class to Draw a polyline from the user mouse interaction
  * (a) A single left click will add a vertex to to polyline
- * (b) A double click will and the vertex and end the drawing polyline
+ * (b) A double click will add the vertex and end the drawing polyline
  * (c) The <esc> key will abort the operation
  */
 class DrawPolyline extends Draw {
@@ -15,7 +15,7 @@ class DrawPolyline extends Draw {
         entities, 
         minNumberOfPositions = 2,
         maxNumberOfPositions = null,
-        polylineOptions = {
+        polylineGraphicsOptions = {
             material : Color.RED,
 			width: 2.0,
             clampToGround: true
@@ -24,7 +24,7 @@ class DrawPolyline extends Draw {
     ) {
         super(viewer, entities, minNumberOfPositions, maxNumberOfPositions);
         this._viewer = viewer;
-        this._polylineOptions = polylineOptions;
+        this._polylineOptions = polylineGraphicsOptions;
 
         this._positionsInteraction = null;
         this._polylineVertices = [];
@@ -85,8 +85,9 @@ class DrawPolyline extends Draw {
 		
 		var graphics = this._entity.polyline.clone();
 		graphics.positions = clonedPositions;
+        const resultEntity = new Entity({polyline: graphics});
 		
-		return graphics;
+		return resultEntity;
     }
 
     _getCoordinateAddedHandler() {
