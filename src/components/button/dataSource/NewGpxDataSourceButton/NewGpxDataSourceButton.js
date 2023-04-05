@@ -54,7 +54,7 @@ const NewGpxDataSourceButton = ({
         defined(onNewDataSource) && onNewDataSource(ds);
         //hide window
         setInitialValues(null);
-     }, [viewer.dataSources, onNewDataSource]);
+     }, [viewer, onNewDataSource]);
 
      return (
         <React.Fragment>

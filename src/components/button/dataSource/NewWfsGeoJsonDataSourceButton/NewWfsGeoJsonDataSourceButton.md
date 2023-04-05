@@ -15,6 +15,7 @@ An example with the __New Wfs GeoJson DataSource Button__ component.
             - SRS: EPSG:4326
             - Output Format: application/json
             - Max Features: 2000
+            - Geometry Name: Geometrie
             - For the information about these atributes 
               check the [ol/format/WFS.writeGetFeature](https://openlayers.org/en/latest/apidoc/module-ol_format_WFS-WFS.html).
         - In the *General* tab:

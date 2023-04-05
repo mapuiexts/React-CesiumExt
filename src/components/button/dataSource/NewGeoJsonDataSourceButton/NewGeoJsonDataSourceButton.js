@@ -55,7 +55,7 @@ const NewGeoJsonDataSourceButton = ({
         //hide window
         setInitialValues(null);
 
-     }, [viewer.dataSources, onNewDataSource]);
+     }, [viewer, onNewDataSource]);
 
      return (
         <React.Fragment>

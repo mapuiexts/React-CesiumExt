@@ -30,6 +30,8 @@ import ViewerWidget from '../../../widget/viewer/ViewerWidget/ViewerWidget';
 import ButtonControlContainer from '../../../widget/container/ButtonControlContainer/ButtonControlContainer';
 import NewOSMImageryLayerButton from '../../../button/imageryLayer/NewOSMImageryLayerButton/NewOSMImageryLayerButton';
 import DataSourceTree from '../../../tree/dataSource/DataSourceTree/DataSourceTree';
+import GpxDataSourceFactory from '../../../../core/factory/dataSource/GpxDataSourceFactory';
+import GeoJsonDataSourceFactory from '../../../../core/factory/dataSource/GeoJsonDataSourceFactory';
 import ImageryLayerBuilder from '../../../../core/factory/imageryLayer/ImageryLayerBuilder';
 import belgiumImageryLayers from '../../../../assets/imageryLayer/belgiumImageryLayers.json';
 import defaultImageryLayers from '../../../../assets/imageryLayer/defaultImageryLayers.json';
@@ -69,8 +71,10 @@ const createCzmlDataSource = (viewer) => {
 };
 
 const createGpxDataSource = (viewer) => {
-    let ds = new GpxDataSource ();
-    ds.load('https://mapuiexts.github.io/react-cesiumext.github.io/assets/Gpx/complexTrk.gpx')
+    const factory = new GpxDataSourceFactory();
+    const loadOptions = factory.defaultLoadOptions;
+    let ds = factory.create();
+    ds.load('https://mapuiexts.github.io/react-cesiumext.github.io/assets/Gpx/complexTrk.gpx', loadOptions)
     .then(dataSource => {
         viewer.dataSources.add(dataSource);
     })
@@ -80,8 +84,11 @@ const createGpxDataSource = (viewer) => {
 };
 
 const createGeoJsonDataSource = (viewer) => {
-    let ds = new GeoJsonDataSource('US States');
-    ds.load('https://mapuiexts.github.io/react-cesiumext.github.io/assets/GeoJson/ne_10m_us_states.topojson')
+    //let ds = new GeoJsonDataSource('US States');
+    const factory = new GeoJsonDataSourceFactory();
+    const loadOptions = factory.defaultLoadOptions;
+    const ds = factory.create('US States');
+    ds.load('https://mapuiexts.github.io/react-cesiumext.github.io/assets/GeoJson/ne_10m_us_states.topojson', loadOptions)
     .then(dataSource => {
         viewer.dataSources.add(dataSource);
     })

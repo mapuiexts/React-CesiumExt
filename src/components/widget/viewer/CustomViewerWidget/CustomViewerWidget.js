@@ -52,7 +52,8 @@ const CustomViewerWidget = ({
         <div className="react-cesiumext-custom-viewer" {...otherProps}>
             <div className="cesium-viewer">
                 <div ref={containerViewerRef} className="cesium-viewer-cesiumWidgetContainer"/>
-                    {defined(viewerRef.current) ? children : <Spin/>}
+                    {children}
+                    {/*defined(viewerRef.current) ? children : <Spin/>*/}
                 <div className="cesium-viewer-bottom" ref={containerBottomRef} /*style={{display:'none'}}*/>
                 </div>  
             </div>

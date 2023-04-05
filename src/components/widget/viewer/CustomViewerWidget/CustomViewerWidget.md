@@ -16,20 +16,22 @@ Ion.defaultAccessToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI1OGZjN
 
 const CustomViewerWidgetExample = () => {
     const onStart = (viewer) => {
-        console.log(viewer);
+        //enable depth test so things behind terrain will disapear.
+        viewer.scene.globe.depthTestAgainstTerrain = true;
         // Add Buildings for Grand Place/Belgium.
         viewer.scene.primitives.add(
             new Cesium3DTileset({
                 url: 'https://mapuiexts.github.io/react-cesiumext.github.io/assets/3D_Tiles/UrbAdm3D_148170_3DTILES/tileset/tileset.json',
+                backFaceCulling: false
             })
         ); 
         // Fly the camera to San Francisco at the given longitude, latitude, and height.
         viewer.camera.flyTo({
-        destination : Cartesian3.fromDegrees( 4.3524312269858, 50.84678117753969, 100),
-        orientation : {
-            heading : Math.toRadians(0.0),
-            pitch : Math.toRadians(-15.0),
-        }
+            destination : Cartesian3.fromDegrees( 4.3524312269858, 50.84678117753969, 100),
+            orientation : {
+                heading : Math.toRadians(0.0),
+                pitch : Math.toRadians(-15.0),
+            }
         });
     };
     const viewerOpts = {

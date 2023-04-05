@@ -1,4 +1,4 @@
-<p>This Example shows the creation of a simple Viewer Widget.</p>
+This Example shows the creation of a simple __Viewer Widget__.
 
 
 ```js
@@ -23,7 +23,9 @@ const ViewerWidgetExample = () => {
         });
     };
     const viewerOpts = {
-        terrainProvider: createWorldTerrain()
+        terrainProvider: createWorldTerrain(),
+        timeline: false,
+        animation: false
     };
 
     return (

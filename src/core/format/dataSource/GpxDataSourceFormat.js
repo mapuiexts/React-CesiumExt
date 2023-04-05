@@ -41,7 +41,7 @@ class GpxDataSourceFormat extends DataSourceFormat {
     }
 
     /**
-     * Read the json object and update the GeoJson dataSource
+     * Read the json object and update the Gpx dataSource
      * @param {Object} json the json object to be read
      * @param {Cesium.GeoJsonDataSource} dataSource the cesium GeoJson dataSource to be updated
      */
