@@ -36,7 +36,7 @@
         "@testing-library/user-event": "^13.5.0",
         "ag-grid-community": "^29.3.0",
         "ag-grid-react": "^29.3.0",
-        "antd": "^4.23.1",
+        "antd": "^5.4.3",
         "cesium": "^1.96.0",
         "ol": "^7.1.0",
         "react-draggable": "^4.4.5",
