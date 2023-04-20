@@ -1,5 +1,4 @@
 import React, { useRef, useEffect } from 'react';
-import { Spin } from 'antd';
 import PropTypes from 'prop-types';
 import {Viewer, defined} from 'cesium';
 import './ViewerWidget.css';

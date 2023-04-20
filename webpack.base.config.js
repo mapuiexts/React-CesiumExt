@@ -68,7 +68,10 @@ module.exports = {
           https: require.resolve("https-browserify"),
           zlib: require.resolve("browserify-zlib"),
           stream: require.resolve("stream-browserify"),
-          http: require.resolve("stream-http")
+          http: require.resolve("stream-http"),
+          buffer: false,
+          url: false,
+          fs: false
         },
 
         alias: {
@@ -94,39 +97,6 @@ module.exports = {
                 test: /\.css$/,
                 use: ['style-loader', 'css-loader']
             }, 
-            //enable if using craco/less
-            // {
-            //     test: /\.less$/,
-            //     use: [
-            //     'style-loader',
-            //     'css-loader',
-            //     {
-            //         loader: 'less-loader',
-            //         options: {
-            //         lessOptions: {
-            //             javascriptEnabled: true
-            //         }
-            //         }
-            //     }
-            //     ]
-            // }, 
-
-            // {
-            //     test: /\.(png|gif|jpg|jpeg|svg|xml|json)$/,
-            //     use: [ 'url-loader' ]
-            // },
-
-            // {
-            //   test: /\.(jpe?g|png|gif|ico)$/i,
-            //   type: 'asset/resource',
-            //   generator: {
-            //     filename: 'img/[name].[ext]'
-            //   }
-            // },
-            // {
-            //   test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/,
-            //   type: 'asset/resource'
-            // },
             {
                 test: /\.(ttf|eot|svg|kml)(\?v=[0-9]\.[0-9]\.[0-9])?$/,
                 type: 'asset/resource'
@@ -151,7 +121,7 @@ module.exports = {
         }),
         
         // Copy Cesium Assets, Widgets, and Workers to a static directory
-        new CopyWebpackPlugin({ 
+        new CopyWebpackPlugin({
             patterns: [
                 {from: path.join(cesiumSource, 'Assets'), to: path.join(cesiumPath, "Assets")},
                 {from: path.join(cesiumSource, 'ThirdParty'), to: path.join(cesiumPath, 'ThirdParty')},
@@ -175,8 +145,8 @@ module.exports = {
                 //     from: path.join(cesiumSource, "Widgets"),
                 //     to: path.join(cesiumPath, "Widgets")
                 // }
-            ]
-        }),
+            ]}
+        ),
          
     ],
     //mode: 'development',
