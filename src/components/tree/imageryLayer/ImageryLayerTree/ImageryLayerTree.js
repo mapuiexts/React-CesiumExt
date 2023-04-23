@@ -177,15 +177,19 @@ const ImageryLayerTree = ({
       viewer && viewer?.imageryLayers?.layerMoved.addEventListener(onCesiumLayerMoved);
       viewer && viewer?.imageryLayers?.layerShownOrHidden.addEventListener(onCesiumLayerShownOrHidden);
       return () => {
-        viewer && viewer?.imageryLayers?.layerAdded.removeEventListener(onCesiumLayerAdded);
-        viewer && viewer?.imageryLayers?.layerRemoved.removeEventListener(onCesiumLayerRemoved);
-        viewer && viewer?.imageryLayers?.layerMoved.removeEventListener(onCesiumLayerMoved);
-        viewer && viewer?.imageryLayers?.layerShownOrHidden.removeEventListener(onCesiumLayerShownOrHidden);
+        const imageryLayers = defined(viewer) && !viewer.isDestroyed() ? viewer.imageryLayers : null;
+        if(defined(imageryLayers) && !imageryLayers.isDestroyed()) {
+          imageryLayers.layerAdded.removeEventListener(onCesiumLayerAdded);
+          imageryLayers.layerRemoved.removeEventListener(onCesiumLayerRemoved);
+          imageryLayers.layerMoved.removeEventListener(onCesiumLayerMoved);
+          imageryLayers.layerShownOrHidden.removeEventListener(onCesiumLayerShownOrHidden);
+        }
       }
 
     }, [onCesiumLayerAdded, onCesiumLayerRemoved, onCesiumLayerMoved, onCesiumLayerShownOrHidden, viewer]);
 
     return (
+        viewer &&
         <Tree
             {...otherProps}
             treeData={currentTreeData}

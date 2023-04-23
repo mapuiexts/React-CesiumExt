@@ -116,13 +116,15 @@ const DataSourceContextMenu = ({
     }, [viewer, ds,  menuPropsFunc]);
 
     return (
-        <Dropdown 
-            {...otherProps}
-            menu={menuProps} 
-            trigger={['contextMenu']}
-        >
-            {children}
-        </Dropdown>
+        <div onClick={(e) => e.stopPropagation()}>
+            <Dropdown 
+                {...otherProps}
+                menu={menuProps} 
+                trigger={['contextMenu']}
+            >
+                {children}
+            </Dropdown>
+        </div>
     );
 };
 

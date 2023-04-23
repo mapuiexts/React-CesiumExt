@@ -62,13 +62,15 @@ const ImageryLayerContextMenu = ({
   }, [menuPropsFunc, layer, imageryLayers, viewer]);
 
   return (
-      <Dropdown 
-          {...otherProps}
-          menu={menuProps} 
-          trigger={['contextMenu']}
-      >
-          {children}
-      </Dropdown>
+      <div onClick={(e) => e.stopPropagation()}>
+        <Dropdown 
+            {...otherProps}
+            menu={menuProps} 
+            trigger={['contextMenu']}
+        >
+            {children}
+        </Dropdown>
+      </div>
   );
 
 };

@@ -25,6 +25,7 @@ const Header = ({
             onMouseOver = { onMouseOver }
             onMouseOut = { onMouseOut }
             style = { style } 
+            onClick={(e) => e.stopPropagation()}
         >
         { title } 
         <div style = {

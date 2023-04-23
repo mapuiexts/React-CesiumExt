@@ -1,15 +1,11 @@
 This Example shows the creation of a simple __Custom Viewer Widget__.
 
-The component __ButtonControlContainer__ is used to set the position of
-the button in the viewport and set its size.
 
 
 ```js
 import CustomViewerWidget from './CustomViewerWidget';
 import { Ion, createWorldTerrain, createOsmBuildings, Cartesian3, Math, Cesium3DTileset } from "cesium";
 import ButtonControlContainer from '../../container/ButtonControlContainer/ButtonControlContainer';
-import 'antd/dist/antd.min.css';
-import 'cesium/Widgets/widgets.css';
 import '../../../../assets/css/react-cesiumext-controls.css';
 
 Ion.defaultAccessToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI1OGZjNDZkNC1iOTdlLTRhYWMtODBjYy1mNWIzOGEwYjUxNjAiLCJpZCI6MTAzODcsInNjb3BlcyI6WyJhc3IiLCJnYyJdLCJpYXQiOjE1NTYyODk0MDl9.f13hGNgcrSFUzcocb5CpHD3Im9xzT0c7IDAPcpwGidc';
@@ -40,15 +36,9 @@ const CustomViewerWidgetExample = () => {
 
     return (
       <CustomViewerWidget options={viewerOpts} onStart={onStart}>
-        <ButtonControlContainer style={{top:0, left:0, width:64, height:32}}>
-            <button onClick={()=> alert('hello')} >Hello</button>
-        </ButtonControlContainer>
-        <ButtonControlContainer style={{top:0, left:64, width:64, height:32}}>
-            <button onClick={()=> alert('hello')} >Hello</button>
-        </ButtonControlContainer>
-        <ButtonControlContainer style={{top:32, left:0, width:64, height:32}}>
-            <button onClick={()=> alert('hello')} >Hello</button>
-        </ButtonControlContainer>
+        <button className="react-cesiumext-control" style={{top:4, left:4, width:64, height:32}} onClick={()=> alert('hello')} >Hello</button>
+        <button className="react-cesiumext-control" style={{top:4, left:96, width:64, height:32}} onClick={()=> alert('hello')} >Hello</button>
+        <button className="react-cesiumext-control" style={{top:50, left:4, width:64, height:32}} onClick={()=> alert('hello')} >Hello</button>
       </CustomViewerWidget>
     );
 };

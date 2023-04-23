@@ -35,8 +35,8 @@ import GeoJsonDataSourceFactory from '../../../../core/factory/dataSource/GeoJso
 import ImageryLayerBuilder from '../../../../core/factory/imageryLayer/ImageryLayerBuilder';
 import belgiumImageryLayers from '../../../../assets/imageryLayer/belgiumImageryLayers.json';
 import defaultImageryLayers from '../../../../assets/imageryLayer/defaultImageryLayers.json';
-import 'antd/dist/antd.min.css';
-import 'cesium/Widgets/widgets.css';
+import '../../../../assets/css/react-cesiumext-controls.css';
+//import 'cesium/Widgets/widgets.css';
 
 // Your access token can be found at: https://cesium.com/ion/tokens.
 // This is a temporary default access token
@@ -159,9 +159,7 @@ const DataSourceTreeApp = () => {
   return(
       <div style={{display:'flex'}}>
         <ViewerWidget options={viewerOpts} onStart={onStart} style={{width:'80%'}}>
-          <ButtonControlContainer style={{top:4, left:4}}>
-            <Checkbox onChange={onChange}>Custom Context Menu</Checkbox>
-         </ButtonControlContainer>
+          <Checkbox  onChange={onChange} className="react-cesiumext-control" style={{top:4, left:4}}>Custom Context Menu</Checkbox>
         </ViewerWidget>
         <DataSourceTree viewer={viewer} menuPropsFunc={menuPropsFunc}/>
       </div>

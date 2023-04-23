@@ -192,9 +192,12 @@ const DataSourceTree = ({
         viewer && viewer?.dataSources?.dataSourceRemoved.addEventListener(onDataSourceRemoved );
         viewer && viewer?.dataSources?.dataSourceMoved.addEventListener(onDataSourceMoved);
         return () => {
-            viewer && viewer?.dataSources?.dataSourceAdded.removeEventListener(onDataSourceAdded);
-            viewer && viewer?.dataSources?.dataSourceRemoved.removeEventListener(onDataSourceRemoved);
-            viewer && viewer?.dataSources?.dataSourceMoved.removeEventListener(onDataSourceMoved);
+            const dataSources = defined(viewer) && !viewer.isDestroyed() ? viewer.dataSources : null;
+            if(defined(dataSources) && !dataSources.isDestroyed()) {
+                dataSources?.dataSourceAdded.removeEventListener(onDataSourceAdded);
+                dataSources?.dataSourceRemoved.removeEventListener(onDataSourceRemoved);
+                dataSources?.dataSourceMoved.removeEventListener(onDataSourceMoved);
+            }
         }
   
       }, [onDataSourceAdded, onDataSourceRemoved, onDataSourceMoved, viewer]);

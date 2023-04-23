@@ -1,19 +1,17 @@
 import { useCallback, useState } from 'react';
-//import { Button, Menu, Dropdown, Space  } from 'antd';
-import { Ion, createWorldTerrain, defined, /*createOsmBuildings,*/ Cartesian3, Cesium3DTileset, /*IonResource*/ } from "cesium";
+import { Ion, createWorldTerrain, GeoJsonDataSource, Color, defined, /*createOsmBuildings,*/ Cartesian3, Cesium3DTileset, DataSource, /*IonResource*/ } from "cesium";
 import ViewerWidget from './components/widget/viewer/ViewerWidget/ViewerWidget';
 import ImageryLayerTree from './components/tree/imageryLayer/ImageryLayerTree/ImageryLayerTree';
 import DataSourceTree from './components/tree/dataSource/DataSourceTree/DataSourceTree';
 import defaultImageryLayers from './assets/imageryLayer/defaultImageryLayers.json';
 import belgiumImageryLayers from './assets/imageryLayer/belgiumImageryLayers.json';
+import belgiumProvinces from './assets/data/geoJson/belgium-provinces-wgs84.json';
 import ImageryLayerBuilder from './core/factory/imageryLayer/ImageryLayerBuilder';
-//import OverlayTooltip from './components/overlay/tooltip/OverlayTooltip/OverlayTooltip';
 import WfsGetFeatureButton from './components/button/wfs/WfsGetFeatureButton/WfsGetFeatureButton';
-
-import 'antd/dist/antd.min.css'; //https://github.com/ant-design/ant-design/issues/33327
-//import 'cesium/Widgets/widgets.css';
+import EntityGrid from './components/grid/entity/EntityGrid/EntityGrid';
 import './App.css';
 import TrackCoordinateButton from './components/button/coordinate/TrackCoordinateButton/TrackCoordinateButton';
+import { AgGridReact } from 'ag-grid-react';
 
 //https://geo.api.vlaanderen.be/Adressenregister/wfs?service=WFS&request=getcapabilities
 const wfsUrl = 'https://geoservices.informatievlaanderen.be/overdrachtdiensten/Adressen/wfs';
@@ -59,9 +57,21 @@ const flyOpts = {
 function App() {
 
   const [viewer, setViewer] = useState(null);
+  const [dataSource, setDataSource] = useState(null);
   
   const onStart = useCallback((aViewer) => {
     console.log(aViewer);
+    //create geojson datasource
+    // aViewer.dataSources.add(GeoJsonDataSource.load(belgiumProvinces, {
+    //   stroke: Color.RED,
+    //   fill: Color.BLUE.withAlpha(0.3),
+    //   strokeWidth: 2,
+    //   })).then((ds => {
+    //     console.log(ds);
+    //     setDataSource(ds);
+    // }));
+   
+    setDataSource(new GeoJsonDataSource('bld'));
     aViewer.imageryLayers.removeAll();
     // Add Cesium OSM Buildings, a global 3D buildings layer.
     //aViewer.scene.primitives.add(createOsmBuildings());   
@@ -88,40 +98,10 @@ function App() {
     setViewer(aViewer);
   }, []);
 
-  // const onClick = useCallback(() => {
-  //   console.log('overlay');
-  //   return (
-  //     <>
-  //     {/* <Button>Hi</Button> */}
-  //     <OverlayTooltip viewer={viewer} visible={true}><div>Hello</div></OverlayTooltip>
-  //     </>
-  //   );
-  // }, [viewer]);
-
-  // const menu = (
-  //   <Menu TabIndex={0}
-  //     items={[
-  //       {
-  //         label: <a href="https://www.antgroup.com">1st menu item</a>,
-  //         key: '0',
-  //       },
-  //       {
-  //         label: <a href="https://www.aliyun.com">2nd menu item</a>,
-  //         key: '1',
-  //       },
-  //       {
-  //         type: 'divider',
-  //       },
-  //       {
-  //         label: '3rd menu item',
-  //         key: '3',
-  //       },
-  //     ]}
-  //   />
-  // );
+  
   
   return (
-    <div className="App">
+    <div className="App" style={{display: 'flex', flexDirection: 'column', width:'100%', height:900}}>
       <div style={{display:'flex'}}>
         {/* <Button type="primary" onClick={onClick}>test</Button> */}
         {
@@ -129,16 +109,21 @@ function App() {
         <>
           <WfsGetFeatureButton url={wfsUrl} wfsOptions={wfsOptions} >Get Feature</WfsGetFeatureButton>
           <TrackCoordinateButton viewer={viewer}>TrackCoordinate</TrackCoordinateButton>
-          {/* <WfsGetFeatureByPolygonButton viewer={viewer} wfsResourceOptions={wfsResourceOptions} wfsOptions={wfsOptions} >Get Feature by Polygon</WfsGetFeatureByPolygonButton> */}
         </>
         }
       </div>
-      <div style={{display:'flex', flexDirection:'row'}}>
-        <ViewerWidget options={viewerOpts} onStart={onStart} style={{width:'80%', height:'80vh'}}/>
-        <div  style={{display:'flex', flexDirection:'column'}}>
+      <div style={{display:'flex', flexDirection:'row', height:'100%'}}>
+        <ViewerWidget options={viewerOpts} onStart={onStart} style={{width:'80%', height:'90%'}}/>
+        <div  style={{display:'flex', flexDirection:'column', width:'20%'}}>
           <ImageryLayerTree viewer={viewer} rootName="Imagery Layers" />
           <DataSourceTree viewer={viewer} rootName="Data Sources" />
         </div>
+      </div>
+      <div style={{height:'30%'}}>
+        {viewer && dataSource &&
+            //<EntityGrid viewer={viewer} ds={dataSource} />
+            <AgGridReact rowData={[]} getRowNodeId={(data) => data._id} deltaRowDataMode={true} immutableData={true} />
+        }
       </div>
       {/* <OverlayTooltip viewer={viewer} visible={true}>
         <div>Draw a Line ...</div>
