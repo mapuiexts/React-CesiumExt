@@ -19,6 +19,7 @@ const ImageryLayerContextMenu = ({
 
   const imageryLayers = viewer.imageryLayers;
   const menuProps = useMemo(() => {
+    if(!defined(viewer) || viewer.isDestroyed()) return {items:[]};
     if(defined(menuPropsFunc)) {
       return menuPropsFunc(viewer, layer);
     }

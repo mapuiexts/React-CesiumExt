@@ -58,22 +58,21 @@ const NewWmsImageryLayerButton = ({
       * in the dialog
       */
      const onFinish = useCallback((values) => {
-        
-        const imageryProviderFormat = new WebMapServiceImageryProviderFormat();
-        if(!defined(values.provider)) {
-            values.provider = imageryProviderFormat.writeJsonDefaultValues();
+        if(defined(viewer) && !viewer.isDestroyed()) {
+            const imageryProviderFormat = new WebMapServiceImageryProviderFormat();
+            if(!defined(values.provider)) {
+                values.provider = imageryProviderFormat.writeJsonDefaultValues();
+            }
+            imageryProviderFormat.formatJson(values.provider);
+            if(!defined(values.options)) values.options = {};
+            //hide window
+            setInitialValues(null);
+            //create layer
+            const layerFactory = new ImageryLayerFactory();
+            values.type = "WebMapService";
+            const layer = layerFactory.buildLayer(values);
+            viewer.imageryLayers.add(layer);
         }
-        imageryProviderFormat.formatJson(values.provider);
-        if(!defined(values.options)) values.options = {};
-        console.log(values);
-        //hide window
-        setInitialValues(null);
-        //create layer
-        const layerFactory = new ImageryLayerFactory();
-        values.type = "WebMapService";
-        const layer = layerFactory.buildLayer(values);
-       
-        defined(viewer) && viewer.imageryLayers.add(layer);
      }, [viewer]);
 
      return (

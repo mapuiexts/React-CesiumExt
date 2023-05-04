@@ -31,15 +31,13 @@ const WfsGetFeatureButton = ({
     }, [url, wfsOptions, wfsSendRequest, fetchOptions]);
 
     useEffect(() => {
-        if(defined(wfsResponse) && !wfsIsLoading) {
+        if(defined(wfsResponse) && !wfsIsLoading && defined(viewer) && !viewer.isDestroyed()) {
             //load datasource if provided
             defined(ds) && ds.load(wfsResponse,  ds._loadOptions).then((dataSource)=> {
-                console.log('datasource', dataSource);
                 const entities = dataSource.entities.values;
                 viewer && viewer.flyTo(dataSource.entities);
                 for (let i = 0; i < entities.length; i++) {
                     const entity = entities[i];
-                    console.log('entity', entity);
                     if(defined(entity.billboard)) {
                         entity.billboard.heightReference = HeightReference.CLAMP_TO_GROUND;
                     }

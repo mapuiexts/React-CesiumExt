@@ -395,7 +395,7 @@ const EntityGrid = ({
     }, []);
 
     return(
-        viewer &&
+        defined(viewer) && !viewer.isDestroyed() &&
         <div className='rcesiumext-entitygrid'>
             <AgGridReact
                 {...otherProps}

@@ -19,7 +19,7 @@ This Example shows the usage of a __ImageryLayer Tree__ component.
 ```js
 import { useCallback, useState } from 'react';
 import {Checkbox, Button} from 'antd';
-import { Ion, createWorldTerrain, createOsmBuildings, Cartesian3, Math, defined } from "cesium";
+import { Ion, Terrain, createOsmBuildingsAsync, Cartesian3, Math, defined } from "cesium";
 import CustomViewerWidget from '../../../widget/viewer/CustomViewerWidget/CustomViewerWidget';
 import ButtonControlContainer from '../../../widget/container/ButtonControlContainer/ButtonControlContainer';
 import NewOSMImageryLayerButton from '../../../button/imageryLayer/NewOSMImageryLayerButton/NewOSMImageryLayerButton';
@@ -35,9 +35,8 @@ Ion.defaultAccessToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI1OGZjN
 
 //the config for the 3d terrain elevation provider
 const viewerOpts = {
-
   //terrainProvider: createWorldTerrain()
-  terrainProvider: createWorldTerrain({
+  terrain: Terrain.fromWorldTerrain({
     requestWaterMask : true, //required for water effects
     requestVertexNormals : true //required for lighting
   })
@@ -101,16 +100,21 @@ const ImageryLayerTreeApp = () => {
     //remove all default imageryLayers
     aViewer.imageryLayers.removeAll();
     // Add Cesium OSM Buildings, a global 3D buildings layer.
-    aViewer.scene.primitives.add(createOsmBuildings());   
+    createOsmBuildingsAsync()
+    .then((tileset) => {
+      aViewer.scene.primitives.add(tileset);
+    })
+    .catch((error) => {
+      console.log(`Error creating tileset: ${error}`);
+    });
     // Fly the camera to Dinant, Belgium at the given longitude, latitude, and height.
     aViewer.camera.flyTo(flyOpts);
-    
     //retrieve layer definitions from asset/imageryLayer folder and build layers
     const layerOptions = {
       layers: [...belgiumImageryLayers.layers, ...defaultImageryLayers.layers]
     };
     const layerBuilder = new ImageryLayerBuilder();
-    layerBuilder.build(layerOptions, aViewer.imageryLayers);
+    layerBuilder.buildAsync(layerOptions, aViewer.imageryLayers);
     
     setViewer(aViewer);
   }, [])

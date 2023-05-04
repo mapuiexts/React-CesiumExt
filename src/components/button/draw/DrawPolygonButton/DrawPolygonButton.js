@@ -42,14 +42,16 @@ const DrawPolygonButton = ({
     }, [end, onDrawEnded]);
 
     const start = useCallback(() => {
-        if(!defined(interactionRef.current)) {
-            interactionRef.current = new DrawPolygon(viewer, viewer.entities, 
-                minNumberOfPositions, maxNumberOfPositions, polygonGraphicsOptions, outlineGraphicsOptions);
-            interactionRef.current.interactionStarted.addEventListener(interactionStartedHandler);
-            interactionRef.current.interactionAborted.addEventListener(interactionAbortedHandler);
-            interactionRef.current.interactionEnded.addEventListener(interactionEndedHandler);
-            interactionRef.current.start();
-            setIsRunning(true);
+        if(defined(viewer) && !viewer.isDestroyed()) {
+            if(!defined(interactionRef.current)) {
+                interactionRef.current = new DrawPolygon(viewer, viewer.entities, 
+                    minNumberOfPositions, maxNumberOfPositions, polygonGraphicsOptions, outlineGraphicsOptions);
+                interactionRef.current.interactionStarted.addEventListener(interactionStartedHandler);
+                interactionRef.current.interactionAborted.addEventListener(interactionAbortedHandler);
+                interactionRef.current.interactionEnded.addEventListener(interactionEndedHandler);
+                interactionRef.current.start();
+                setIsRunning(true);
+            }
         }
     }, [interactionAbortedHandler, interactionStartedHandler, interactionEndedHandler, 
         minNumberOfPositions, maxNumberOfPositions, polygonGraphicsOptions, 

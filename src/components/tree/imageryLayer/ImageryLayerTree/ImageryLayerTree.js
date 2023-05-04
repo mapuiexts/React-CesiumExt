@@ -31,10 +31,8 @@ const ImageryLayerTree = ({
      const getVisibleKeys = useCallback((treeData) => {
         const format = new ImageryLayerTreeDataFormat();
         const flatArray = format.asFlatArray(treeData);
-        console.log('flat array', flatArray);
-        const visibleArray= flatArray.filter(node=> defined(node.layer) && node.layer.show === true);
+        const visibleArray= flatArray.filter(node=> defined(node.layer) && !node.layer.isDestroyed() && node.layer.show === true);
         const checkedKeys = visibleArray.map(node => node.key).sort();
-        console.log('checkedKeys', checkedKeys);
         return checkedKeys;
 
     }, []);
@@ -56,20 +54,20 @@ const ImageryLayerTree = ({
   };
 
     const rebuildTreeNodes = useCallback(() => {
-        if(viewer) {
-            const format = new ImageryLayerTreeDataFormat();
-            const newTreeData = format.writeTreeDataLayer(viewer, rootName, menuPropsFunc); 
-            setCurrentTreeData(newTreeData);
-            setCheckedKeys((prevCheckedKeys) => {
-              const curCheckedKeys = getVisibleKeys(newTreeData);
-              if(isArraysEqual(prevCheckedKeys, curCheckedKeys)) {
-                  return prevCheckedKeys;
-              }
-              else {
-                  return curCheckedKeys;
-              }
-          });
-        }
+      if(defined(viewer) && !viewer.isDestroyed()) {
+          const format = new ImageryLayerTreeDataFormat();
+          const newTreeData = format.writeTreeDataLayer(viewer, rootName, menuPropsFunc); 
+          setCurrentTreeData(newTreeData);
+          setCheckedKeys((prevCheckedKeys) => {
+            const curCheckedKeys = getVisibleKeys(newTreeData);
+            if(isArraysEqual(prevCheckedKeys, curCheckedKeys)) {
+                return prevCheckedKeys;
+            }
+            else {
+                return curCheckedKeys;
+            }
+        });
+      }
     }, [viewer, rootName, getVisibleKeys, menuPropsFunc]);
 
     /**
@@ -107,8 +105,7 @@ const ImageryLayerTree = ({
           });
         } 
         else {
-            if (defined(node.layer)) {
-                console.log('set layer visibility', isVisible);
+            if (defined(node.layer) && !node.layer.isDestroyed()) {
                 node.layer.show = isVisible;
             }
         }
@@ -172,19 +169,21 @@ const ImageryLayerTree = ({
 
     //register/unregister cesium events
     useEffect(() => {
-      viewer && viewer?.imageryLayers?.layerAdded.addEventListener(onCesiumLayerAdded);
-      viewer && viewer?.imageryLayers?.layerRemoved.addEventListener(onCesiumLayerRemoved);
-      viewer && viewer?.imageryLayers?.layerMoved.addEventListener(onCesiumLayerMoved);
-      viewer && viewer?.imageryLayers?.layerShownOrHidden.addEventListener(onCesiumLayerShownOrHidden);
-      return () => {
-        const imageryLayers = defined(viewer) && !viewer.isDestroyed() ? viewer.imageryLayers : null;
-        if(defined(imageryLayers) && !imageryLayers.isDestroyed()) {
-          imageryLayers.layerAdded.removeEventListener(onCesiumLayerAdded);
-          imageryLayers.layerRemoved.removeEventListener(onCesiumLayerRemoved);
-          imageryLayers.layerMoved.removeEventListener(onCesiumLayerMoved);
-          imageryLayers.layerShownOrHidden.removeEventListener(onCesiumLayerShownOrHidden);
+    if(defined(viewer) && !viewer.isDestroyed() && defined(viewer.imageryLayers) && !viewer.imageryLayers.isDestroyed()) {
+        viewer && viewer.imageryLayers.layerAdded.addEventListener(onCesiumLayerAdded);
+        viewer && viewer.imageryLayers.layerRemoved.addEventListener(onCesiumLayerRemoved);
+        viewer && viewer.imageryLayers.layerMoved.addEventListener(onCesiumLayerMoved);
+        viewer && viewer.imageryLayers.layerShownOrHidden.addEventListener(onCesiumLayerShownOrHidden);
+        return () => {
+          const imageryLayers = defined(viewer) && !viewer.isDestroyed() ? viewer.imageryLayers : null;
+          if(defined(imageryLayers) && !imageryLayers.isDestroyed()) {
+            imageryLayers.layerAdded.removeEventListener(onCesiumLayerAdded);
+            imageryLayers.layerRemoved.removeEventListener(onCesiumLayerRemoved);
+            imageryLayers.layerMoved.removeEventListener(onCesiumLayerMoved);
+            imageryLayers.layerShownOrHidden.removeEventListener(onCesiumLayerShownOrHidden);
+          }
         }
-      }
+    }
 
     }, [onCesiumLayerAdded, onCesiumLayerRemoved, onCesiumLayerMoved, onCesiumLayerShownOrHidden, viewer]);
 

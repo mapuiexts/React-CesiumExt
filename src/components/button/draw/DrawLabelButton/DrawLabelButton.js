@@ -44,13 +44,15 @@ const DrawLabelButton = ({
     }, [onDrawAborted, end]);
 
     const start = useCallback(() => {
-        if(!defined(interactionRef.current)) {
-            interactionRef.current = new DrawLabel(viewer, viewer.entities, text, labelGraphicsOptions);
-            interactionRef.current.interactionStarted.addEventListener(interactionStartedHandler);
-            interactionRef.current.interactionEnded.addEventListener(interactionEndedHandler);
-            interactionRef.current.interactionAborted.addEventListener(interactionAbortedHandler);
-            interactionRef.current.start();
-            setIsRunning(true);
+        if(defined(viewer) && !viewer.isDestroyed()) {
+            if(!defined(interactionRef.current)) {
+                interactionRef.current = new DrawLabel(viewer, viewer.entities, text, labelGraphicsOptions);
+                interactionRef.current.interactionStarted.addEventListener(interactionStartedHandler);
+                interactionRef.current.interactionEnded.addEventListener(interactionEndedHandler);
+                interactionRef.current.interactionAborted.addEventListener(interactionAbortedHandler);
+                interactionRef.current.start();
+                setIsRunning(true);
+            }
         }
     }, [interactionStartedHandler, interactionEndedHandler, interactionAbortedHandler, viewer, text, labelGraphicsOptions]);
 

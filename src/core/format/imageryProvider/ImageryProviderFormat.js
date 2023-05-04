@@ -27,17 +27,6 @@ class ImageryProviderFormat {
       /* readonly credit (Credit | String) */
       json.credit = provider.credit;
 
-      json.defaultAlpha  = provider.defaultAlpha;
-      json.defaultBrightness  = provider.defaultBrightness;
-      json.defaultContrast = provider.defaultContrast;
-      json.defaultDayAlpha = provider.defaultDayAlpha;
-      json.defaultGamma = provider.defaultGamma;
-      json.defaultHue = provider.defaultHue;
-      json.defaultMagnificationFilter = provider.defaultMagnificationFilter;
-      json.defaultMinificationFilter = provider.defaultMinificationFilter;
-      json.defaultNightAlpha = provider.defaultNightAlpha;
-      json.defaultSaturation = provider.defaultSaturation;
-
       return json;
      }
 
@@ -65,17 +54,6 @@ class ImageryProviderFormat {
       /* readonly credit (Credit | String) */
       json.credit = undefined;
 
-      json.defaultAlpha  = undefined;
-      json.defaultBrightness  = undefined;
-      json.defaultContrast = undefined;
-      json.defaultDayAlpha = undefined;
-      json.defaultGamma = undefined;
-      json.defaultHue = undefined;
-      json.defaultMagnificationFilter = undefined;
-      json.defaultMinificationFilter = undefined;
-      json.defaultNightAlpha = undefined;
-      json.defaultSaturation = undefined;
-
       return json;
     }
 
@@ -85,16 +63,7 @@ class ImageryProviderFormat {
      * @param {*} provider the provider to be updated
      */
      readJson(json, provider) {
-        'defaultAlpha' in json && (provider.defaultAlpha = json.defaultAlpha);
-        'defaultBrightness' in json && (provider.defaultBrightness = json.defaultBrightness);
-        'defaultContrast' in json && (provider.defaultContrast = json.defaultContrast);
-        'defaultDayAlpha' in json && (provider.defaultDayAlpha = json.defaultDayAlpha);
-        'defaultGamma' in json && (provider.defaultGamma = json.defaultGamma);
-        'defaultHue' in json && (provider.defaultHue = json.defaultHue);
-        'defaultMagnificationFilter' in json && (provider.defaultMagnificationFilter = json.defaultMagnificationFilter);
-        'defaultMinificationFilter' in json && (provider.defaultMinificationFilter = json.defaultMinificationFilter);
-        'defaultNightAlpha' in json && (provider.defaultNightAlpha = json.defaultNightAlpha);
-        'defaultSaturation' in json && (provider.defaultSaturation = json.defaultSaturation);
+        
      }
 }
 

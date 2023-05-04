@@ -45,15 +45,17 @@ const NewGpxDataSourceButton = ({
       * in the dialog
       */
      const onFinish = useCallback((values) => {
-        const loadOptions = new GpxDataSourceFormat().getLoadOptions(values);
-        const ds = new GpxDataSource();
-        ds.show = values.show;
-        ds._loadOptions = loadOptions;
-        const dataSources = viewer.dataSources;
-        dataSources.add(ds);
-        defined(onNewDataSource) && onNewDataSource(ds);
-        //hide window
-        setInitialValues(null);
+        if(defined(viewer) && !viewer.isDestroyed()) {
+            const loadOptions = new GpxDataSourceFormat().getLoadOptions(values);
+            const ds = new GpxDataSource();
+            ds.show = values.show;
+            ds._loadOptions = loadOptions;
+            const dataSources = viewer.dataSources;
+            dataSources.add(ds);
+            defined(onNewDataSource) && onNewDataSource(ds);
+            //hide window
+            setInitialValues(null);
+        }
      }, [viewer, onNewDataSource]);
 
      return (

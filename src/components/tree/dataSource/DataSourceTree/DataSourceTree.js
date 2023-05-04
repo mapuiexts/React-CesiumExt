@@ -33,10 +33,8 @@ const DataSourceTree = ({
     const getVisibleKeys = useCallback((treeData) => {
         const format = new DataSourceTreeDataFormat();
         const flatArray = format.asFlatArray(treeData);
-        console.log('flat array', flatArray);
         const visibleArray= flatArray.filter(node=> defined(node.dataSource) && node.dataSource.show === true);
         const checkedKeys = visibleArray.map(node => node.key).sort();
-        console.log('checkedKeys', checkedKeys);
         return checkedKeys;
     }, []);
 
@@ -62,7 +60,7 @@ const DataSourceTree = ({
      * changes will be reflected in the tree data
      */
     const rebuildTreeNodes = useCallback(() => {
-        if(viewer) {
+        if(defined(viewer) && !viewer.isDestroyed()) {
            
             const format = new DataSourceTreeDataFormat();
             const newTreeData = format.writeTreeData(viewer, rootName, menuPropsFunc); 
@@ -122,7 +120,6 @@ const DataSourceTree = ({
         } 
         else {
             if (defined(node.dataSource)) {
-                console.log('set dataSource visibility', isVisible);
                 node.dataSource.show = isVisible;
             }
         }
@@ -146,7 +143,6 @@ const DataSourceTree = ({
      * callback called once the datasource name is changed
      */
     const onDataSourceChanged = useCallback((ds) => {
-        console.log('datasource', ds);
         rebuildTreeNodes();
     }, [rebuildTreeNodes]);
 
@@ -188,18 +184,19 @@ const DataSourceTree = ({
 
     //register/unregister cesium events for the datasource collection
     useEffect(() => {
-        viewer && viewer?.dataSources?.dataSourceAdded.addEventListener(onDataSourceAdded);
-        viewer && viewer?.dataSources?.dataSourceRemoved.addEventListener(onDataSourceRemoved );
-        viewer && viewer?.dataSources?.dataSourceMoved.addEventListener(onDataSourceMoved);
-        return () => {
-            const dataSources = defined(viewer) && !viewer.isDestroyed() ? viewer.dataSources : null;
-            if(defined(dataSources) && !dataSources.isDestroyed()) {
-                dataSources?.dataSourceAdded.removeEventListener(onDataSourceAdded);
-                dataSources?.dataSourceRemoved.removeEventListener(onDataSourceRemoved);
-                dataSources?.dataSourceMoved.removeEventListener(onDataSourceMoved);
+        if(defined(viewer) && !viewer.isDestroyed() && defined(viewer.dataSources) && !viewer.dataSources.isDestroyed()) {
+            viewer && viewer.dataSources.dataSourceAdded.addEventListener(onDataSourceAdded);
+            viewer && viewer.dataSources.dataSourceRemoved.addEventListener(onDataSourceRemoved );
+            viewer && viewer.dataSources.dataSourceMoved.addEventListener(onDataSourceMoved);
+            return () => {
+                const dataSources = defined(viewer) && !viewer.isDestroyed() ? viewer.dataSources : null;
+                if(defined(dataSources) && !dataSources.isDestroyed()) {
+                    dataSources?.dataSourceAdded.removeEventListener(onDataSourceAdded);
+                    dataSources?.dataSourceRemoved.removeEventListener(onDataSourceRemoved);
+                    dataSources?.dataSourceMoved.removeEventListener(onDataSourceMoved);
+                }
             }
         }
-  
       }, [onDataSourceAdded, onDataSourceRemoved, onDataSourceMoved, viewer]);
 
     /**

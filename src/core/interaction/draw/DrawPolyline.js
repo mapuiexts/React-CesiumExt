@@ -107,7 +107,6 @@ class DrawPolyline extends Draw {
     _getCurrentPositionChangedHander() {
         const that = this;
         return (draw, position) => {
-            console.log('current position changed', draw, position);
             if(that.positions.length > 0) {
                 if(that._polylineVertices.length > that._numberOfAddedPositions) {
                     that._polylineVertices.pop();

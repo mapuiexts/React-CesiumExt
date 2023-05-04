@@ -4,7 +4,7 @@ This Example shows the creation of a simple __Custom Viewer Widget__.
 
 ```js
 import CustomViewerWidget from './CustomViewerWidget';
-import { Ion, createWorldTerrain, createOsmBuildings, Cartesian3, Math, Cesium3DTileset } from "cesium";
+import { Ion, createWorldTerrain, Cartesian3, Math, Cesium3DTileset } from "cesium";
 import ButtonControlContainer from '../../container/ButtonControlContainer/ButtonControlContainer';
 import '../../../../assets/css/react-cesiumext-controls.css';
 

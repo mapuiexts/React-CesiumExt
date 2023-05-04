@@ -45,16 +45,17 @@ const NewWfsGeoJsonDataSourceButton = ({
       * in the dialog
       */
      const onFinish = useCallback((values) => {
-        //create new datasource
-        const ds = new WfsGeoJsonDataSource(values.name);
-        //update datasource with the custom attributes: resource, wfsOptions and style
-        const format = new WfsGeoJsonDataSourceFormat();
-        format.readJson(values, ds);
-        viewer.dataSources.add(ds);
-        defined(onNewDataSource) && onNewDataSource(ds);
-        //hide window
-        setInitialValues(null);
-
+        if(defined(viewer) && !viewer.isDestroyed()) {
+            //create new datasource
+            const ds = new WfsGeoJsonDataSource(values.name);
+            //update datasource with the custom attributes: resource, wfsOptions and style
+            const format = new WfsGeoJsonDataSourceFormat();
+            format.readJson(values, ds);
+            viewer.dataSources.add(ds);
+            defined(onNewDataSource) && onNewDataSource(ds);
+            //hide window
+            setInitialValues(null);
+        }
      }, [viewer, onNewDataSource]);
 
      return (

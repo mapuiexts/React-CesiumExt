@@ -38,9 +38,8 @@ const LoadDataSourceFromXmlDataButton = ({
         setInitialValues(null);
 
         const loadOptions = ds._loadOptions || {};
-        console.log('data', xmlDoc);
         ds.load(xmlDoc, loadOptions).then((dataSource) => {
-            viewer && viewer.flyTo(dataSource.entities);
+            defined(viewer) && !viewer.isDestroyed() && viewer.flyTo(dataSource.entities);
         });
 
     }, [ds, viewer]);

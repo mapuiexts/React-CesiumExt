@@ -38,9 +38,8 @@ const LoadDataSourceFromJsonDataButton = ({
         setInitialValues(null);
 
         const loadOptions = ds._loadOptions || {};
-        console.log('data', json);
         ds.load(json, loadOptions).then((dataSource) => {
-            viewer && viewer.flyTo(dataSource.entities);
+            defined(viewer) && !viewer.isDestroyed() &&  viewer.flyTo(dataSource.entities);
         });
 
     }, [ds, viewer]);

@@ -19,7 +19,6 @@ class DataSourceTreeDataFormat {
         menuPropsFunc = undefined) {
         
         const dataSources = viewer.dataSources;
-        console.log ('datasources:', dataSources);
         //create the root group layer
         const key = '_ROOT';
         const treeData = {

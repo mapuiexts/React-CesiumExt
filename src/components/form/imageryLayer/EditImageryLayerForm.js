@@ -24,7 +24,6 @@ const EditImageryLayerForm = ({
     }, []);
    
     let initialValues = null;
-    console.log('layer', layer);
     if(layer) {
         if(layer.imageryProvider instanceof OpenStreetMapImageryProvider ) {
             LayerForm = OpenStreetMapImageryLayerForm;
@@ -51,19 +50,15 @@ const EditImageryLayerForm = ({
                 options: layerOpts,
                 provider: providerOpts
             };
-            console.log('initial Values for', initialValues);
         }
     }
 
     const internalOnFinish = useCallback((values) => {
-        console.log(values);
         //retrieve the layer and provider properties
         const {provider, options} = values;
         //update layer and its provider
         layerFormat.readJson(options, layer);
         provider && imageryProviderFormat.readJson(provider, layer.imageryProvider);
-        console.log('edited layer', layer);
-        console.log('edited provider', layer.imageryProvider);
         onFinish && onFinish(values);
         
 

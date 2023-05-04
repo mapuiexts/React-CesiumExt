@@ -1,7 +1,7 @@
 import {useState, useCallback} from 'react';
 import PropTypes from 'prop-types';
 import {Button} from 'antd';
-import { ImageryLayer } from 'cesium';
+import { ImageryLayer, defined } from 'cesium';
 import Window from "../../../window/base/Window/Window";
 import EditImageryLayerForm from '../../../form/imageryLayer/EditImageryLayerForm';
 
@@ -45,6 +45,8 @@ const EditImageryLayerButton = ({
     }, []);
 
     return (
+        defined(layer) && layer.isDestroyed()
+        ?
         <>
             <Button onClick={onShowWindow} {...otherProps}>{children}</Button>
             {
@@ -63,6 +65,8 @@ const EditImageryLayerButton = ({
                 </Window>
             }
         </>
+        :
+        null
     );
 };
 

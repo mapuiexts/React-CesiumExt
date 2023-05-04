@@ -25,8 +25,7 @@ const ViewerWidget = ({
             onStart && onStart(aViewer);
         }
         return () => {
-            console.log('destructor');
-            viewerRef.current.destroy();
+            defined(viewerRef.current) && !viewerRef.current.isDestroyed() && viewerRef.current.destroy();
             viewerRef.current = null;
         }
     }, [onStart, options]);

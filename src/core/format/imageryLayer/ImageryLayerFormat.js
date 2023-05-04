@@ -57,27 +57,27 @@ class ImageryLayerFormat {
         const json = {};
          /* readonly rectangle => default provided by ImageryLayer*/
          /* alpha */
-        json.alpha = providerOpts?.defaultAlpha || 1.0;
+        json.alpha = 1.0;
         /* nightAlpha */
-        json.nightAlpha = providerOpts?.defaultNightAlpha || 1.0;
+        json.nightAlpha = 1.0;
         /* dayAlpha */
-        json.dayAlpha = providerOpts?.defaultDayAlpha || 1.0;
+        json.dayAlpha = 1.0;
         /* brightness */
-        json.brightness = providerOpts?.defaultBrightness || ImageryLayer.DEFAULT_BRIGHTNESS;
+        json.brightness = ImageryLayer.DEFAULT_BRIGHTNESS;
         /* contrast */
-        json.contrast = providerOpts?.defaultBrightness  || ImageryLayer.DEFAULT_CONTRAST;
+        json.contrast = ImageryLayer.DEFAULT_CONTRAST;
         /* hue */
-        json.hue = providerOpts?.defaultHue || ImageryLayer.DEFAULT_HUE;
+        json.hue = ImageryLayer.DEFAULT_HUE;
         /* saturation */
-        json.saturation = providerOpts?.defaultSaturation || ImageryLayer.DEFAULT_SATURATION;
+        json.saturation = ImageryLayer.DEFAULT_SATURATION;
         /* gamma */
-        json.gamma = providerOpts?.defaultGamma || ImageryLayer.DEFAULT_GAMMA;
+        json.gamma = ImageryLayer.DEFAULT_GAMMA;
         /* splitDirection */
         json.splitDirection = ImageryLayer.DEFAULT_SPLIT;
         /* minificationFilter */
-        json.minificationFilter = providerOpts?.defaultMinificationFilter || ImageryLayer.DEFAULT_MINIFICATION_FILTER;
+        json.minificationFilter = ImageryLayer.DEFAULT_MINIFICATION_FILTER;
         /* magnificationFilter */
-        json.magnificationFilter = providerOpts?.defaultMagnificationFilter || ImageryLayer.DEFAULT_MAGNIFICATION_FILTER;
+        json.magnificationFilter = ImageryLayer.DEFAULT_MAGNIFICATION_FILTER;
         /* show */
         json.show = true;
         /* maximumAnisotropy not available */

@@ -1,6 +1,6 @@
 ## 1-About
 
-React-CesiumExt, the React Cesium Extension, is a Open Source Toolkit that provides collection of components to build a professional 3D map application. Its implementation is based on [Cesium](https://cesium.com/), [Ant Design](https://ant.design) and [React](https://reactjs.org) library. 
+React-CesiumExt, the React Cesium Extension, is a Open Source Toolkit that provides collection of components to build a professional 3D map application. Its implementation is based on [Cesium](https://cesium.com/), [OpenLayers](https://openlayers.org/), [Ant Design](https://ant.design) and [React](https://reactjs.org) library. 
 With a few lines of code you will be able to create a powerfull 3D Web Map application.
 
 So, React-CesiumExt provide you the power to launch a professional 3D Web Map application using Cesium with support to OGC standards like WMS and WFS, givining

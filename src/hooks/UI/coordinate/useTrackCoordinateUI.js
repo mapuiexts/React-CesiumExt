@@ -36,7 +36,6 @@ const useTrackCoordinateUI = ({
     }, []);
 
     const currentPositionChangedHandler = useCallback((interaction, position) => {
-        console.log('overlay position', position);
         if(defined(position)) {
             position.clone(scratchCartesianPosition.current);
             setCurCoordinate([

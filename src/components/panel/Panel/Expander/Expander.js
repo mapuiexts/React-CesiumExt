@@ -42,7 +42,8 @@ const Expander = ({
     <div
       ref={divEl}
       className={className}
-      style = {{...style, height} }
+      style = {height === 0 ? {...style, height} 
+      : {...style, height, minHeight:'15em'}  }
     >
       {otherProps.children}
     </div>

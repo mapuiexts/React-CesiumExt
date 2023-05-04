@@ -133,7 +133,6 @@ class Draw extends PointerInteraction {
             //dbl click will fire this event two times. So, making sure the position is not added two times
             if(defined(position) && (this.positions.length === 0 || !this.positions[this.positions.length -1].equals(position))) {
                 defined(position) && that.addCoordinate(position);
-                console.log('left click handler', position);
             }
         };
     }

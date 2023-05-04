@@ -4,6 +4,7 @@
 - First Beta release
 
 ## v0.1.3 - xx/xx/2023
-- Upgrade react-styleguidist from version 11.2.0 to version 13.1.1
-- Upgrade ag-grid-react and ag-grid-community from version 28.x to version 29.3.0
-
+- Upgraded react-styleguidist from version 11.2.0 to version 13.1.1
+- Upgraded ag-grid-react and ag-grid-community from version 28.x to version 29.3.0
+- Removed the call for all the depracated Cesium functions.
+- cleared the javascript 'console.log' from code

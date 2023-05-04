@@ -1,5 +1,5 @@
 import { useCallback, useState } from 'react';
-import { Ion, createWorldTerrain, GeoJsonDataSource, Color, defined, /*createOsmBuildings,*/ Cartesian3, Cesium3DTileset, DataSource, /*IonResource*/ } from "cesium";
+import { Ion, Terrain, GeoJsonDataSource, Color, defined, /*createOsmBuildingsAsync,*/ Cartesian3, Cesium3DTileset, DataSource, /*IonResource*/ } from "cesium";
 import ViewerWidget from './components/widget/viewer/ViewerWidget/ViewerWidget';
 import ImageryLayerTree from './components/tree/imageryLayer/ImageryLayerTree/ImageryLayerTree';
 import DataSourceTree from './components/tree/dataSource/DataSourceTree/DataSourceTree';
@@ -37,7 +37,7 @@ Ion.defaultAccessToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI1OGZjN
 
 
 const viewerOpts = {
-  terrainProvider: createWorldTerrain({
+  terrain: Terrain.fromWorldTerrain({
     requestWaterMask : true, //required for water effects
     requestVertexNormals : true //required for lighting
   }),
@@ -60,40 +60,44 @@ function App() {
   const [dataSource, setDataSource] = useState(null);
   
   const onStart = useCallback((aViewer) => {
-    console.log(aViewer);
-    //create geojson datasource
-    // aViewer.dataSources.add(GeoJsonDataSource.load(belgiumProvinces, {
-    //   stroke: Color.RED,
-    //   fill: Color.BLUE.withAlpha(0.3),
-    //   strokeWidth: 2,
-    //   })).then((ds => {
-    //     console.log(ds);
-    //     setDataSource(ds);
-    // }));
-   
     setDataSource(new GeoJsonDataSource('bld'));
     aViewer.imageryLayers.removeAll();
     // Add Cesium OSM Buildings, a global 3D buildings layer.
-    //aViewer.scene.primitives.add(createOsmBuildings());   
+    // createOsmBuildingsAsync()
+    // .then((tileset) => {
+    //   aViewer.scene.primitives.add(tileset);
+    // })
+    // .catch((error) => {
+    //   console.log(`Error creating tileset: ${error}`);
+    // });   
     // Fly the camera to San Francisco at the given longitude, latitude, and height.
     aViewer.camera.flyTo(flyOpts);
-    console.log('imageryLayers1', aViewer.imageryLayers);
     //enable depth test so things behind terrain will disapear.
     aViewer.scene.globe.depthTestAgainstTerrain = true;
+    //add tileset
+    //Cesium3DTileset.fromIonAssetId(IonResource.fromAssetId(1299995), {
+    Cesium3DTileset.fromUrl('https://mapuiexts.github.io/react-cesiumext.github.io/assets/3D_Tiles/UrbAdm3D_148170_3DTILES/tileset/tileset.json', {
+      backFaceCulling: false
+    })
+    .then((tileset) => {
+      aViewer.scene.primitives.add(tileset);
+    })
+    .catch((error) => {
+      console.log(`Error creating tileset: ${error}`);
+    });
 
-    const tileset = aViewer.scene.primitives.add(
-      new Cesium3DTileset({
-        url: 'https://mapuiexts.github.io/react-cesiumext.github.io/assets/3D_Tiles/UrbAdm3D_148170_3DTILES/tileset/tileset.json',
-        //url: IonResource.fromAssetId(1299995),
-        backFaceCulling: false
-      })
-    );
-    console.log('tileset', tileset);
+    // const tileset = aViewer.scene.primitives.add(
+    //   new Cesium3DTileset({
+    //     url: 'https://mapuiexts.github.io/react-cesiumext.github.io/assets/3D_Tiles/UrbAdm3D_148170_3DTILES/tileset/tileset.json',
+    //     //url: IonResource.fromAssetId(1299995),
+    //     backFaceCulling: false
+    //   })
+    // );
     const layerOptions = {
       layers: [...belgiumImageryLayers.layers, ...defaultImageryLayers.layers]
     };
     const layerBuilder = new ImageryLayerBuilder();
-    layerBuilder.build(layerOptions, aViewer.imageryLayers);
+    layerBuilder.buildAsync(layerOptions, aViewer.imageryLayers);
     
     setViewer(aViewer);
   }, []);
@@ -120,10 +124,10 @@ function App() {
         </div>
       </div>
       <div style={{height:'30%'}}>
-        {viewer && dataSource &&
-            //<EntityGrid viewer={viewer} ds={dataSource} />
+        {/*viewer && dataSource &&
+            <EntityGrid viewer={viewer} ds={dataSource} />
             <AgGridReact rowData={[]} getRowNodeId={(data) => data._id} deltaRowDataMode={true} immutableData={true} />
-        }
+      */}
       </div>
       {/* <OverlayTooltip viewer={viewer} visible={true}>
         <div>Draw a Line ...</div>

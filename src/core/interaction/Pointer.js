@@ -136,7 +136,6 @@ class PointerInteraction {
     getLeftDblClickHandler() {
         const that = this;
         return (positionedEvent) => {
-            console.log('left dbl click handler', positionedEvent);
             that.end();
         };
     }
