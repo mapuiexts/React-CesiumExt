@@ -62,21 +62,21 @@ const NewOSMImageryLayerButton = ({
       * in the dialog
       */
      const onFinish = useCallback((values) => {
-        console.log(values);
-        if(!defined(values.provider)) {
-            values.provider = {
-                ...OpenStreetMapProviderFormItems.defaultValues,
-                ...ProviderFormItems.defaultValues
-            };
+        if(defined(viewer) && !viewer.isDestroyed()) {
+            if(!defined(values.provider)) {
+                values.provider = {
+                    ...OpenStreetMapProviderFormItems.defaultValues,
+                    ...ProviderFormItems.defaultValues
+                };
+            }
+            //hide window
+            setInitialValues(null);
+            //create layer
+            const layerFactory = new ImageryLayerFactory();
+            values.type = "OpenStreetMap";
+            const layer = layerFactory.buildLayer(values);
+            viewer && viewer.imageryLayers.add(layer);
         }
-        //hide window
-        setInitialValues(null);
-        //create layer
-        const layerFactory = new ImageryLayerFactory();
-        values.type = "OpenStreetMap";
-        const layer = layerFactory.buildLayer(values);
-        viewer && viewer.imageryLayers.add(layer);
-        
 
      }, [viewer]);
 

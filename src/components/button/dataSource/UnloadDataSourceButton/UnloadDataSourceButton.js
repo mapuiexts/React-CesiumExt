@@ -1,6 +1,6 @@
 import { useCallback, useState, useEffect } from 'react';
 import { Button } from 'antd';
-import {defined, DeveloperError} from 'cesium';
+import {defined} from 'cesium';
 
 /**
  * Button to remove all the entities from a specific data source

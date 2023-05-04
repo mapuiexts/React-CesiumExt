@@ -23,7 +23,7 @@ This Example shows the usage of a __DataSource Tree__ component.
 ```js
 import { useCallback, useState } from 'react';
 import {Checkbox, Button} from 'antd';
-import {Ion, createWorldTerrain, createOsmBuildings, Cartesian3, Math, defined, 
+import {Ion, createWorldTerrain, createOsmBuildingsAsync, Cartesian3, Math, defined, 
         CzmlDataSource, GeoJsonDataSource, GpxDataSource
 } from "cesium";
 import ViewerWidget from '../../../widget/viewer/ViewerWidget/ViewerWidget';
@@ -32,11 +32,10 @@ import NewOSMImageryLayerButton from '../../../button/imageryLayer/NewOSMImagery
 import DataSourceTree from '../../../tree/dataSource/DataSourceTree/DataSourceTree';
 import GpxDataSourceFactory from '../../../../core/factory/dataSource/GpxDataSourceFactory';
 import GeoJsonDataSourceFactory from '../../../../core/factory/dataSource/GeoJsonDataSourceFactory';
-import ImageryLayerBuilder from '../../../../core/factory/imageryLayer/ImageryLayerBuilder';
 import belgiumImageryLayers from '../../../../assets/imageryLayer/belgiumImageryLayers.json';
 import defaultImageryLayers from '../../../../assets/imageryLayer/defaultImageryLayers.json';
-import 'antd/dist/antd.min.css';
-import 'cesium/Widgets/widgets.css';
+import '../../../../assets/css/react-cesiumext-controls.css';
+//import 'cesium/Widgets/widgets.css';
 
 // Your access token can be found at: https://cesium.com/ion/tokens.
 // This is a temporary default access token
@@ -109,8 +108,14 @@ const DataSourceTreeApp = () => {
     createGpxDataSource(aViewer);
     //create GeoJson DataSource
     createGeoJsonDataSource(aViewer);
-    // Add Cesium OSM Buildings, a global 3D buildings layer.
-    aViewer.scene.primitives.add(createOsmBuildings());   
+    // Add Cesium OSM Buildings, a global 3D buildings layer.  
+    createOsmBuildingsAsync()
+    .then((tileset) => {
+      aViewer.scene.primitives.add(tileset);
+    })
+    .catch((error) => {
+      console.log(`Error creating tileset: ${error}`);
+    }); 
     // Fly the camera to Dinant, Belgium at the given longitude, latitude, and height.
     aViewer.camera.flyTo(flyOpts);
     
@@ -159,9 +164,7 @@ const DataSourceTreeApp = () => {
   return(
       <div style={{display:'flex'}}>
         <ViewerWidget options={viewerOpts} onStart={onStart} style={{width:'80%'}}>
-          <ButtonControlContainer style={{top:4, left:4}}>
-            <Checkbox onChange={onChange}>Custom Context Menu</Checkbox>
-         </ButtonControlContainer>
+          <Checkbox  onChange={onChange} className="react-cesiumext-control" style={{top:4, left:4}}>Custom Context Menu</Checkbox>
         </ViewerWidget>
         <DataSourceTree viewer={viewer} menuPropsFunc={menuPropsFunc}/>
       </div>

@@ -77,8 +77,6 @@ class WfsGeoJsonDataSourceFormat extends DataSourceFormat {
      */
     readJson(json, dataSource) {
         super.readJson(json, dataSource, true);
-        console.log('json.style', json.style);
-        console.log('dataSource.style', dataSource.style);
         //update dataSource with style
         if(!defined(json) && !defined(json.style)) return;
         if(!defined(dataSource.style)) dataSource.style = {};

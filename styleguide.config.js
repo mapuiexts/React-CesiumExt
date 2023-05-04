@@ -1,7 +1,5 @@
 const path = require('path');
-const CopyWebpackPlugin = require('copy-webpack-plugin');
 const webpackConfig = require('./webpack.base.config.js');
-const webpack = require('webpack');
 
 const cesiumSource = "node_modules/cesium/Source";
 
@@ -10,11 +8,7 @@ module.exports = {
     moduleAliases: {
       'cesium': path.resolve(__dirname, cesiumSource)
     },
-    webpackConfig, //https://github.com/styleguidist/react-styleguidist/issues/1910, https://gist.github.com/nebomilic/938f93695b4ed6756fb37db757aca06f
-    // dangerouslyUpdateWebpackConfig(webpackConfig, env) {
-    //   console.log(webpackConfig);
-    //   return webpackConfig
-    // },
+    webpackConfig, 
     components: 'src/**/*.{js,jsx,tsx}',
     getExampleFilename(componentPath) {
       return componentPath.replace(/\.js?$/, '.md');
@@ -25,7 +19,6 @@ module.exports = {
       dir = dir.split(path.sep).join("/");
       return `import ${fileName} from '@mapuiexts/react-cesiumext/${dir}/${fileName}';`;
     },
-    //
     pagePerSection: true,
     assetsDir: './docs',
     tocMode: 'collapse',

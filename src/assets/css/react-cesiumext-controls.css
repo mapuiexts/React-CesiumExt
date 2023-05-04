@@ -12,7 +12,7 @@
     /* height: 1.375em;
     width: 1.375em; */
     /* line-height: .4em; */
-    background-color: rgba(24, 144, 255, 0.5);
+    background-color: rgba(22, 119, 255, 0.5);
     border: none;
     border-radius: 2px;
 }
@@ -20,5 +20,14 @@
 .cesium-button:hover,
 .cesium-button:focus {
     text-decoration: none;
-    background-color: rgba(24, 144, 255, 0.7);
+    background-color: rgba(22, 119, 255, 0.7);
+}
+
+.react-cesiumext-control {
+    /* padding: 2px; */
+    border-radius: 2px;
+    border: none;
+    position: absolute;
+    background-color: rgba(22, 119, 255, 0.5);
+    color: white;
 }

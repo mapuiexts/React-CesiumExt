@@ -25,7 +25,6 @@ const EditDataSourceForm = ({
     //const [format, setFormat] = useState(null);
 
     const internalOnFinish = useCallback((values) => {
-        console.log(values);
         //update layer and its provider
         let newFormat = null;
         if(ds instanceof WfsGeoJsonDataSource ) {
@@ -44,7 +43,6 @@ const EditDataSourceForm = ({
             newFormat = new DataSourceFormat();
         }
         newFormat.readJson(values, ds);
-        console.log('edited datasource', ds);
         onFinish && onFinish(values);
 
     }, [ds, onFinish]);
@@ -94,7 +92,6 @@ const EditDataSourceForm = ({
     }, [ds, internalOnFinish, onFinishFailed, otherProps]);
 
    
-    // console.log('ds', ds);
     // if(defined(ds)) {
     //     if(ds instanceof WfsGeoJsonDataSource ) {
     //         DSForm = WfsGeoJsonDataSourceForm;
@@ -119,7 +116,6 @@ const EditDataSourceForm = ({
 
     //     if(defined(DSForm)) {
     //         jsonDataSource = format.writeJson(ds);
-    //         console.log('json datasource for edit:', jsonDataSource);
     //     }
     // }
 

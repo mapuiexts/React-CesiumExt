@@ -60,16 +60,16 @@ const NewIonImageryLayerButton = ({
       * in the dialog
       */
      const onFinish = useCallback((values) => {
-        console.log(values);
-        //hide window
-        setInitialValues(null);
-        //create layer
-        const layerFactory = new ImageryLayerFactory();
-        values.type = "Ion";
-        const layer = layerFactory.buildLayer(values);
-        defined(viewer) && viewer.imageryLayers.add(layer);
-        onCreate && onCreate(layer);
-
+        if(defined(viewer) && !viewer.isDestroyed()) {
+            //hide window
+            setInitialValues(null);
+            //create layer
+            const layerFactory = new ImageryLayerFactory();
+            values.type = "Ion";
+            const layer = layerFactory.buildLayer(values);
+            defined(viewer) && viewer.imageryLayers.add(layer);
+            onCreate && onCreate(layer);
+        }
      }, [viewer, onCreate]);
 
     return (

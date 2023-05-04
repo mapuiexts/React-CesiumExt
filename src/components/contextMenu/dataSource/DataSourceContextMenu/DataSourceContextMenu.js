@@ -6,7 +6,7 @@ import NewGeoJsonDataSourceButton from '../../../button/dataSource/NewGeoJsonDat
 import NewWfsGeoJsonDataSourceButton from "../../../button/dataSource/NewWfsGeoJsonDataSourceButton/NewWfsGeoJsonDataSourceButton";
 import NewCzmlDataSourceButton from "../../../button/dataSource/NewCzmlDataSourceButton/NewCzmlDataSourceButton";
 import NewGpxDataSourceButton from "../../../button/dataSource/NewGpxDataSourceButton/NewGpxDataSourceButton";
-import FlyToDataSourceButton from "../../../button/dataSource/FlyToDataSourceButton/FlyToDataSourceButton";
+import FlyToButton from "../../../button/viewer/FlyToButton/FlyToButton";
 import RemoveDataSourceButton from "../../../button/dataSource/RemoveDataSourceButton/RemoveDataSourceButton";
 import LoadDataSourceFromResourceButton from "../../../button/dataSource/LoadDataSourceFromResourceButton/LoadDataSourceFromResourceButton";
 import LoadDataSourceFromXmlDataButton from "../../../button/dataSource/LoadDataSourceFromXmlDataButton/LoadDataSourceFromXmlDataButton";
@@ -25,8 +25,7 @@ const DataSourceContextMenu = ({
 }) => {
 
     const menuProps = useMemo(() => {
-        //defined(ds) && console.log(ds.constructor.name, ds.constructor.name);
-        //const typeName = defined(ds) ? ds.constructor.name : undefined;
+        if(!defined(viewer) || viewer.isDestroyed()) return {items:[]};
         if(defined(menuPropsFunc)) {
           return menuPropsFunc(viewer, ds);
         }
@@ -60,7 +59,7 @@ const DataSourceContextMenu = ({
             //Fly To
             if(defined(ds) /*&& ds.entities.values.length > 0*/) {
                 props.items.push({
-                    label: <FlyToDataSourceButton size="small" type="text" viewer={viewer} ds={ds}>Fly to Entities</FlyToDataSourceButton>,
+                    label: <FlyToButton size="small" type="text" viewer={viewer} target={ds}>Fly to Entities</FlyToButton>,
                     key: 'FLY_TO_DS'
                 });
             }
@@ -116,13 +115,15 @@ const DataSourceContextMenu = ({
     }, [viewer, ds,  menuPropsFunc]);
 
     return (
-        <Dropdown 
-            {...otherProps}
-            menu={menuProps} 
-            trigger={['contextMenu']}
-        >
-            {children}
-        </Dropdown>
+        <div onClick={(e) => e.stopPropagation()}>
+            <Dropdown 
+                {...otherProps}
+                menu={menuProps} 
+                trigger={['contextMenu']}
+            >
+                {children}
+            </Dropdown>
+        </div>
     );
 };
 

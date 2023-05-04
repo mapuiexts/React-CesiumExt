@@ -76,11 +76,13 @@ const EntityGridExample = () => {
                 Change Name
             </Button>
             <ViewerWidget options={viewerOpts} onStart={onStart} style={{height: '60%', width:'100%'}}/>
+            
             <div style={{height:'40%'}}>
                 {viewer && dataSource &&
                     <EntityGrid viewer={viewer} ds={dataSource} onEntitySelectionChanged={onEntitySelectionChanged}/>
                 }
             </div>
+            
         </div>
     );
 }

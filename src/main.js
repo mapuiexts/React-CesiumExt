@@ -1,8 +1,7 @@
 //button components
-import FlyToButton from './components/button/camera/FlyToButton/FlyToButton';
 import TrackCoordinateButton from './components/button/coordinate/TrackCoordinateButton/TrackCoordinateButton';
 import EditDataSourceButton from './components/button/dataSource/EditDataSourceButton/EditDataSourceButton';
-import FlyToDataSourceButton from './components/button/dataSource/FlyToDataSourceButton/FlyToDataSourceButton';
+import FlyToButton from './components/button/viewer/FlyToButton/FlyToButton';
 import LoadDataSourceFromJsonDataButton from './components/button/dataSource/LoadDataSourceFromJsonDataButton/LoadDataSourceFromJsonDataButton';
 import LoadDataSourceFromResourceButton from './components/button/dataSource/LoadDataSourceFromResourceButton/LoadDataSourceFromResourceButton';
 import LoadDataSourceFromXmlDataButton from './components/button/dataSource/LoadDataSourceFromXmlDataButton/LoadDataSourceFromXmlDataButton';
@@ -47,7 +46,6 @@ export {
     FlyToButton,
     TrackCoordinateButton,
     EditDataSourceButton,
-    FlyToDataSourceButton,
     LoadDataSourceFromJsonDataButton,
     LoadDataSourceFromResourceButton,
     LoadDataSourceFromXmlDataButton,

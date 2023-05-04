@@ -45,13 +45,15 @@ const NewCzmlDataSourceButton = ({
       * in the dialog
       */
      const onFinish = useCallback((values) => {
-        const ds = new CzmlDataSource(values.name);
-        ds.show = values.show;
-        const dataSources = viewer.dataSources;
-        dataSources.add(ds);
-        defined(onNewDataSource) && onNewDataSource(ds);
-        //hide window
-        setInitialValues(null);
+        if(defined(viewer) && !viewer.isDestroyed()) {
+            const ds = new CzmlDataSource(values.name);
+            ds.show = values.show;
+            const dataSources = viewer.dataSources;
+            dataSources.add(ds);
+            defined(onNewDataSource) && onNewDataSource(ds);
+            //hide window
+            setInitialValues(null);
+        }
      }, [viewer, onNewDataSource]);
 
      return (

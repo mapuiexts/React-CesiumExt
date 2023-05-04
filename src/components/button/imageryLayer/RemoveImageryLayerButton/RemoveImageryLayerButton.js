@@ -19,7 +19,7 @@ const RemoveImageryLayerButton = ({
     ...otherProps
 }) => {
     const onClickHandler = useCallback((event) => {
-        if(defined(layer) && defined(imageryLayers)) {
+        if(defined(layer) && !layer.isDestroyed() && defined(imageryLayers)) {
             imageryLayers.remove(layer, destroy);
             defined(onRemove) && onRemove(layer);
         }

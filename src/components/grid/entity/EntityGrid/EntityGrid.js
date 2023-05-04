@@ -5,9 +5,11 @@ import { useState, useCallback, useEffect, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { AgGridReact } from 'ag-grid-react';
 import usePrevious from '../../../../hooks/common/usePrevious';
-import 'ag-grid-community/dist/styles/ag-grid.css';
-import 'ag-grid-community/dist/styles/ag-theme-balham.css';
+import 'ag-grid-community/styles/ag-grid.css';
+import 'ag-grid-community/styles/ag-theme-balham.css';
 import './EntityGrid.css';
+
+const defaultSelectedColor = Color.YELLOW.withAlpha(0.5);
 
 /**
  * Grid Component to show the Cesium Entities stored in a datasource.
@@ -23,7 +25,7 @@ const EntityGrid = ({
     onGridReady,
     onRowClicked,
     onEntitySelectionChanged,
-    selectedColor = Color.YELLOW.withAlpha(0.5),
+    selectedColor = defaultSelectedColor,
     ...otherProps
 }) => {
 
@@ -83,6 +85,7 @@ const EntityGrid = ({
         if(defined(entities) && entities.length > 0) {
             const data = buildRowDataFromEntities(entities);
             gridApi.applyTransactionAsync({update: data});
+            //gridApi.applyTransaction({update: data});
             
             gridApi.refreshClientSideRowModel('filter');
         }
@@ -139,7 +142,8 @@ const EntityGrid = ({
     const addEntitiesToGrid = useCallback((entities) => {
         if(defined(entities) && entities.length > 0 && defined(gridApi)) {
             const data = buildRowDataFromEntities(entities);
-            gridApi.applyTransactionAsync({add: data});
+            //gridApi.applyTransactionAsync({add: data});
+            gridApi.applyTransaction({add: data});
             //refresh the row model
             gridApi.refreshClientSideRowModel('filter');
             registerEntityPropertyChange(entities);
@@ -158,7 +162,8 @@ const EntityGrid = ({
                 if(defined(row)) return row.data;
                 return undefined;
             });
-            gridApi.applyTransactionAsync({remove: data});
+            //gridApi.applyTransactionAsync({remove: data});
+            gridApi.applyTransaction({remove: data});
             //refresh the row model
             gridApi.refreshClientSideRowModel('filter');
             unRegisterEntityPropertyChange(entities);
@@ -343,16 +348,19 @@ const EntityGrid = ({
      * Build the column definitions and the row data based on
      * the features present in the vector layer and its properties
      */
+    
     useEffect(() => {
-        buildColumnDefs(ds);
-        const entities = ds.entities.values;
-        //adding entities to grid and registeren them for the property changes
-        addEntitiesToGrid(entities);
+        let entities = null;
+        if(defined(ds)) {
+            buildColumnDefs(ds);
+            entities = ds.entities.values;
+            //adding entities to grid and registeren them for the property changes
+            addEntitiesToGrid(entities);
+        }
         return () => {
-            unRegisterEntityPropertyChange(entities);
+            if(defined(entities)) unRegisterEntityPropertyChange(entities);
         }
     }, [buildColumnDefs, unRegisterEntityPropertyChange, addEntitiesToGrid, ds]);
-
     
 
     /**
@@ -369,7 +377,9 @@ const EntityGrid = ({
             }
         }
         
+        
     }, [ds, onCollectionChangedHandler]);
+    
 
     const defaultColDef = useMemo(() => {
         return {
@@ -385,6 +395,7 @@ const EntityGrid = ({
     }, []);
 
     return(
+        defined(viewer) && !viewer.isDestroyed() &&
         <div className='rcesiumext-entitygrid'>
             <AgGridReact
                 {...otherProps}

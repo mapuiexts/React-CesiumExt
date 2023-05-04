@@ -13,10 +13,10 @@ cd my-app
 npm install @craco/craco --save
 ```
 
-### 3. Install craco-cesium
+### 3. Install craco-cesiumext
 
 ```sh
-npm install craco-cesium --save
+npm install craco-cesiumext --save
 ```
 
 ### 4. Install cesium
@@ -56,7 +56,7 @@ Create `craco.config.js` in the project root:
 module.exports = {
   plugins: [
     {
-      plugin: require("craco-cesium")()
+      plugin: require("craco-cesiumext")()
     }
   ]
 };

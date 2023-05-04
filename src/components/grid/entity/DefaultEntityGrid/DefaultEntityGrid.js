@@ -1,12 +1,12 @@
 import { useState, useCallback } from "react";
 import { Space } from "antd";
 import PropTypes from 'prop-types';
-import { Color, Viewer,
+import { Color, Viewer, defined,
     DataSource, GeoJsonDataSource, CustomDataSource,
     CzmlDataSource, GpxDataSource, KmlDataSource
  } from "cesium";
 import EntityGrid from "../EntityGrid/EntityGrid";
-import EntityGridOptionsButton from "../../button/EntityGridOptionsButton/EntityGridOptionsButton";
+import EntityGridOptionsDropdown from "../../dropDown/EntityGridOptionsDropdown/EntityGridOptionsDropdown";
 import './DefaultEntityGrid.css'
 
 /**
@@ -32,17 +32,16 @@ const DefaultEntityGrid = ({
     const [selectedEntities, setSelectedEntities] = useState([]);
 
     const onInternalEntitySelectionChanged = useCallback((entities) => {
-        entities.forEach((entity) => {
-            console.log('selected entityxxxx :', entity);
-        });
         setSelectedEntities(entities);
         onEntitySelectionChanged && onEntitySelectionChanged(entities);
     }, [onEntitySelectionChanged]);
 
     return(
+        defined(viewer) && !viewer.isDestroyed()
+        ?
         <div className='rcesiumext-defaultentitygrid'>
             <Space wrap className='rcesiumext-defaultentitygrid-menubar-container'>
-                <EntityGridOptionsButton viewer={viewer} ds={ds} selectedEntities={selectedEntities}/>
+                <EntityGridOptionsDropdown viewer={viewer} ds={ds} selectedEntities={selectedEntities}/>
             </Space>
             <div className='rcesiumext-defaultentitygrid-content-container'>
                 <EntityGrid
@@ -59,6 +58,8 @@ const DefaultEntityGrid = ({
                 />
             </div>
         </div>
+        :
+        null
     );
 
 };

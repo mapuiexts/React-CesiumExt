@@ -19,6 +19,7 @@ const ImageryLayerContextMenu = ({
 
   const imageryLayers = viewer.imageryLayers;
   const menuProps = useMemo(() => {
+    if(!defined(viewer) || viewer.isDestroyed()) return {items:[]};
     if(defined(menuPropsFunc)) {
       return menuPropsFunc(viewer, layer);
     }
@@ -62,13 +63,15 @@ const ImageryLayerContextMenu = ({
   }, [menuPropsFunc, layer, imageryLayers, viewer]);
 
   return (
-      <Dropdown 
-          {...otherProps}
-          menu={menuProps} 
-          trigger={['contextMenu']}
-      >
-          {children}
-      </Dropdown>
+      <div onClick={(e) => e.stopPropagation()}>
+        <Dropdown 
+            {...otherProps}
+            menu={menuProps} 
+            trigger={['contextMenu']}
+        >
+            {children}
+        </Dropdown>
+      </div>
   );
 
 };

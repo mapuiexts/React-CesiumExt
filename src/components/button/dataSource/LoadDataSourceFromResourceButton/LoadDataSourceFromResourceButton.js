@@ -44,14 +44,13 @@ const LoadDataSourceByResourceButton = ({
         setInitialValues(null);
         //load datasource by resource
         const loadOptions = ds._loadOptions;
-        console.log('url:', values.resource.url);
         const resource = new Resource({
             url: values.resource.url,
             headers: defined(values.resource.headers) ? JSON.parse(values.resource.headers) : undefined,
             queryParameters: defined(values.resource.queryParameters) ? JSON.parse(values.resource.queryParameters) : undefined
         })
         ds.load(resource, loadOptions).then((dataSource => {
-            viewer && viewer.flyTo(dataSource.entities);
+            defined(viewer) && !viewer.isDestroyed() &&  viewer.flyTo(dataSource.entities);
         }));
     }, [ds, viewer]);
 

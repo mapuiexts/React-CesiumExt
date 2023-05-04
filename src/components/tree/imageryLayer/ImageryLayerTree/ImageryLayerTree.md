@@ -19,7 +19,7 @@ This Example shows the usage of a __ImageryLayer Tree__ component.
 ```js
 import { useCallback, useState } from 'react';
 import {Checkbox, Button} from 'antd';
-import { Ion, createWorldTerrain, createOsmBuildings, Cartesian3, Math, defined } from "cesium";
+import { Ion, Terrain, createOsmBuildingsAsync, Cartesian3, Math, defined } from "cesium";
 import CustomViewerWidget from '../../../widget/viewer/CustomViewerWidget/CustomViewerWidget';
 import ButtonControlContainer from '../../../widget/container/ButtonControlContainer/ButtonControlContainer';
 import NewOSMImageryLayerButton from '../../../button/imageryLayer/NewOSMImageryLayerButton/NewOSMImageryLayerButton';
@@ -27,8 +27,7 @@ import ImageryLayerTree from '../../../tree/imageryLayer/ImageryLayerTree/Imager
 import ImageryLayerBuilder from '../../../../core/factory/imageryLayer/ImageryLayerBuilder';
 import belgiumImageryLayers from '../../../../assets/imageryLayer/belgiumImageryLayers.json';
 import defaultImageryLayers from '../../../../assets/imageryLayer/defaultImageryLayers.json';
-import 'antd/dist/antd.min.css';
-import 'cesium/Widgets/widgets.css';
+import '../../../../assets/css/react-cesiumext-controls.css';
 
 // Your access token can be found at: https://cesium.com/ion/tokens.
 // This is a temporary default access token
@@ -36,9 +35,8 @@ Ion.defaultAccessToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI1OGZjN
 
 //the config for the 3d terrain elevation provider
 const viewerOpts = {
-
   //terrainProvider: createWorldTerrain()
-  terrainProvider: createWorldTerrain({
+  terrain: Terrain.fromWorldTerrain({
     requestWaterMask : true, //required for water effects
     requestVertexNormals : true //required for lighting
   })
@@ -98,19 +96,25 @@ const ImageryLayerTreeApp = () => {
   }, [buildCustomContextMenu]);
 
   const onStart = useCallback((aViewer) => {
+
     //remove all default imageryLayers
     aViewer.imageryLayers.removeAll();
     // Add Cesium OSM Buildings, a global 3D buildings layer.
-    aViewer.scene.primitives.add(createOsmBuildings());   
+    createOsmBuildingsAsync()
+    .then((tileset) => {
+      aViewer.scene.primitives.add(tileset);
+    })
+    .catch((error) => {
+      console.log(`Error creating tileset: ${error}`);
+    });
     // Fly the camera to Dinant, Belgium at the given longitude, latitude, and height.
     aViewer.camera.flyTo(flyOpts);
-    
     //retrieve layer definitions from asset/imageryLayer folder and build layers
     const layerOptions = {
       layers: [...belgiumImageryLayers.layers, ...defaultImageryLayers.layers]
     };
     const layerBuilder = new ImageryLayerBuilder();
-    layerBuilder.build(layerOptions, aViewer.imageryLayers);
+    layerBuilder.buildAsync(layerOptions, aViewer.imageryLayers);
     
     setViewer(aViewer);
   }, [])
@@ -118,9 +122,7 @@ const ImageryLayerTreeApp = () => {
   return(
       <div style={{display:'flex'}}>
         <CustomViewerWidget options={viewerOpts} onStart={onStart} style={{width:'80%'}}>
-          <ButtonControlContainer style={{top:4, left:4}}>
-            <Checkbox onChange={onChange}>Custom Context Menu</Checkbox>
-         </ButtonControlContainer>
+         <Checkbox  onChange={onChange} className="react-cesiumext-control" style={{top:4, left:4}}>Custom Context Menu</Checkbox>
         </CustomViewerWidget>
         <ImageryLayerTree viewer={viewer} menuPropsFunc={menuPropsFunc}/>
       </div>

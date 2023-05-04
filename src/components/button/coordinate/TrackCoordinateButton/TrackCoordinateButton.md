@@ -1,4 +1,6 @@
-An example with the __Track Coordinate Button__ component.
+An example with the __Track Coordinate Button__ component:
+- Click the button _Track Coordinate_ to start the tracking
+- Press ESC Key to stop the tracking.
 
 ```js
 import {useState, useCallback} from 'react';

@@ -1,5 +1,4 @@
 import React, { useRef, useEffect } from 'react';
-import { Spin } from 'antd';
 import PropTypes from 'prop-types';
 import {Viewer, defined} from 'cesium';
 import './ViewerWidget.css';
@@ -26,8 +25,7 @@ const ViewerWidget = ({
             onStart && onStart(aViewer);
         }
         return () => {
-            console.log('destructor');
-            viewerRef.current.destroy();
+            defined(viewerRef.current) && !viewerRef.current.isDestroyed() && viewerRef.current.destroy();
             viewerRef.current = null;
         }
     }, [onStart, options]);

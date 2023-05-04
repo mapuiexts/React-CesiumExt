@@ -30,11 +30,8 @@ const WfsGetFeatureByPolygonButton = ({
      * filter to be sent in the wfs request.
      */
     const interactionEndedHandler = useCallback((entity) => {
-        console.log('Interaction ended', entity);
-        
         const geom = new OLPolygonFormat().WriteOLGeometry(entity);
         const localGetFeatureOptions = {...ds?.wfsGetFeature, ...wfsGetFeatureOptions};
-        console.log('ol polygon', geom);
         interactionRef.current.interactionEnded.removeEventListener(interactionEndedHandler);
         interactionRef.current = null;
         const polygonFilter = intersects(
@@ -52,7 +49,7 @@ const WfsGetFeatureByPolygonButton = ({
      * user to draw the polygon on the map.
      */
     const onClickHandler = useCallback(() => {
-        if(!defined(interactionRef.current)) {
+        if(!defined(interactionRef.current) && defined(viewer) && !viewer.isDestroyed()) {
             interactionRef.current = new DrawPolygon(viewer, viewer.entities);
             interactionRef.current.interactionEnded.addEventListener(interactionEndedHandler);
             interactionRef.current.start();
@@ -66,11 +63,11 @@ const WfsGetFeatureByPolygonButton = ({
      * polygon filter.
      */
     useEffect(()=> {
-        if(defined(filter)) {
+        if(defined(filter) && defined(ds)) {
             setFilter(null);
-            const wfsGetFeatureFilteredOptions = {...ds?.wfsGetFeature, ...wfsGetFeatureOptions, filter};
+            const wfsGetFeatureFilteredOptions = {...ds.wfsGetFeature, ...wfsGetFeatureOptions, filter};
             //send request
-            const resource = ds?.resource;
+            const resource = ds.resource;
             wfsGetFeature.sendPostRequest({
                 resource: resource, 
                 wfsResourceOptions: wfsResourceOptions, 
@@ -78,7 +75,7 @@ const WfsGetFeatureByPolygonButton = ({
             });
         }
 
-    }, [filter, wfsGetFeature, ds?.resource, ds?.wfsGetFeature, wfsGetFeatureOptions, wfsResourceOptions]);
+    }, [filter, wfsGetFeature, ds, wfsGetFeatureOptions, wfsResourceOptions]);
 
     /**
      * Method executed after the wfs geojson response is returned.
@@ -87,11 +84,10 @@ const WfsGetFeatureByPolygonButton = ({
      * cesium viewer. 
      */
     useEffect(() => {
-        if(defined(wfsGetFeature.response) && !wfsGetFeature.isLoading) {
+        if(defined(wfsGetFeature.response) && !wfsGetFeature.isLoading && defined(ds) && defined(viewer) && !viewer.isDestroyed()) {
             ds.entities.removeAll();
             //load datasource if provided
             defined(ds) && ds.load(wfsGetFeature.response, ds.style).then((dataSource)=> {
-                console.log('datasource', dataSource);
                 defined(onLoad) && onLoad(dataSource, wfsGetFeature.response);
                 viewer && viewer.flyTo(dataSource.entities);
             });

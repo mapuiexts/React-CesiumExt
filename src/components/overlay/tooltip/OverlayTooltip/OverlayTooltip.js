@@ -42,13 +42,11 @@ const OverlayTooltip = ({
      */
     useEffect(() => {
         if(viewer && visible && !defined(screenSpaceEventHandlerRef.current)) {
-            console.log('new  ScreenSpaceEventHandler ');
             screenSpaceEventHandlerRef.current = new ScreenSpaceEventHandler(viewer.scene.canvas);
         }
 
         return () => {
             if(defined(screenSpaceEventHandlerRef.current)) {
-                console.log('destroy  ScreenSpaceEventHandler ');
                 screenSpaceEventHandlerRef.current.destroy();
                 screenSpaceEventHandlerRef.current = null;
             }
