@@ -6,7 +6,7 @@ import './assets/css/react-cesiumext-controls.css';
 
 Ion.defaultAccessToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI1OGZjNDZkNC1iOTdlLTRhYWMtODBjYy1mNWIzOGEwYjUxNjAiLCJpZCI6MTAzODcsInNjb3BlcyI6WyJhc3IiLCJnYyJdLCJpYXQiOjE1NTYyODk0MDl9.f13hGNgcrSFUzcocb5CpHD3Im9xzT0c7IDAPcpwGidc';
 
-GoogleMaps.defaultApiKey = 'AIzaSyAQqyaQPAssMj1Hp2-nNTdGpTBORQm7Usc';
+GoogleMaps.defaultApiKey = 'your google api key';
 
 const App1 = () => {
    
