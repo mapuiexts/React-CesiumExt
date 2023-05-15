@@ -15,9 +15,11 @@ you the ready to use UI components to:
 
 
 React-CesiumExt is under the MIT License, which allow you to develop open-source or commercial applications 
-free of charge. The source code will be available soon.
+free of charge. 
+The source code is available at [Github](https://github.com/mapuiexts/React-CesiumExt).
 
-React-CesiumExt 0.1.x is the first base version which uses currently the versions Cesiumjs and React 18;
+React-CesiumExt 0.1.x is the first base version which uses currently the versions Cesiumjs and React;
+
 
 ## 2-UI Components
 As shown in the figure below, some included components are: __Imagery Layer Tree__, __DataSource Tree__, __Entity Grid__, etc.

@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import {Viewer, defined} from 'cesium';
 import './ViewerWidget.css';
 
-
 /**
  * The Widget Container for the Cesium Viewer.
  * 
@@ -31,18 +30,10 @@ const ViewerWidget = ({
     }, [onStart, options]);
 
     return (
-        // <div {...otherProps}
-        //      ref={viewerContainerRef}
-        //      className="react-cesiumext-viewer"
-        // >
-        //     {children}
-        // </div>
         <div className="react-cesiumext-viewer" {...otherProps}>
             <div className="cesium-viewer">
                 <div ref={viewerContainerRef} className="cesium-viewer-cesiumWidgetContainer"/>
                 {children}
-                {/*defined(viewerRef.current) ? children : <Spin/> */}
-                {/* <div className="cesium-viewer-bottom" ref={containerBottomRef}/> */}
             </div>
         </div>
     );
@@ -51,8 +42,8 @@ const ViewerWidget = ({
 
 ViewerWidget.propTypes = {
     /**
-     * <p>The configuration <strong>options<strong> parameter to create the Cesium Viewer.</p>
-     * <p>See <a href="https://cesium.com/learn/cesiumjs/ref-doc/Viewer.html#.ConstructorOptions">Cesium Viewer Api Doc</a> for all the configuration</p> 
+     * The configuration options parameter to create the Cesium Viewer
+     * See Cesium Viewer Api Doc for all the configuration
      */
     options: PropTypes.object,
 

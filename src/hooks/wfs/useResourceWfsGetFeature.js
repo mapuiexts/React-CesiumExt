@@ -24,9 +24,9 @@ const useResourceWfsGetFeature = () => {
         setIsLoading(true);
         setError(null);
         const resourceOpts = {
-            headers: {
-                contentType: 'application/xml', 
-            },
+            // headers: {
+            //     contentType: 'application/xml', 
+            // },
             responseType: !defined(wfsGetFeatureOptions.outputFormat) || wfsGetFeatureOptions.outputFormat === 'application/json' ? 'json' : 'xml',
             ...wfsResourceOptions
         };

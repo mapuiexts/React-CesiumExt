@@ -1,9 +1,13 @@
 import {Button} from 'antd';
 import PropTypes from 'prop-types';
 import { useCallback } from 'react';
-import { defined, Viewer, Entity, EntityCollection, DataSource, ImageryLayer, 
-        Cesium3DTileset,  TimeDynamicPointCloud, HeadingPitchRange  
+import { 
+    defined, Viewer, Entity, EntityCollection, 
+    DataSource, CzmlDataSource, GeoJsonDataSource,  
+    GpxDataSource, KmlDataSource, ImageryLayer, 
+    Cesium3DTileset,  TimeDynamicPointCloud, HeadingPitchRange  
 } from 'cesium';
+import WfsGeoJsonDataSource from '../../../../core/packages/engine/DataSources/WfsGeoJsonDataSource';
 
 /**
  * Button Component to fly the camera to the provided
@@ -36,7 +40,7 @@ FlyToButton.propTypes = {
      * The Cesium Viewer on where the camera
      * will be moved.
      */
-    viewer: PropTypes.instanceOf(Viewer).isRequired,
+    viewer: PropTypes.instanceOf(Viewer),
 
     /**
      * The entity, array of entities, entity collection, data source, 
@@ -49,11 +53,16 @@ FlyToButton.propTypes = {
         PropTypes.arrayOf(PropTypes.instanceOf(Entity)),
         PropTypes.instanceOf(EntityCollection),
         PropTypes.instanceOf(DataSource),
+        PropTypes.instanceOf(CzmlDataSource),
+        PropTypes.instanceOf(GeoJsonDataSource),
+        PropTypes.instanceOf(GpxDataSource),
+        PropTypes.instanceOf(KmlDataSource),
+        PropTypes.instanceOf(WfsGeoJsonDataSource),
         PropTypes.instanceOf(ImageryLayer),
         PropTypes.instanceOf(Cesium3DTileset),
         PropTypes.instanceOf(TimeDynamicPointCloud),
         PropTypes.instanceOf(PropTypes.instanceOf(Promise)),
-    ]).isRequired,
+    ]),
 
     /**
      * optional options

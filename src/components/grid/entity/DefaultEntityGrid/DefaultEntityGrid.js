@@ -6,7 +6,7 @@ import { Color, Viewer, defined,
     CzmlDataSource, GpxDataSource, KmlDataSource
  } from "cesium";
 import EntityGrid from "../EntityGrid/EntityGrid";
-import EntityGridOptionsDropdown from "../../dropDown/EntityGridOptionsDropdown/EntityGridOptionsDropdown";
+import EntityGridOptionsDropdown from "../../dropdown/EntityGridOptionsDropdown/EntityGridOptionsDropdown";
 import './DefaultEntityGrid.css'
 
 /**
@@ -30,6 +30,17 @@ const DefaultEntityGrid = ({
 }) => {
 
     const [selectedEntities, setSelectedEntities] = useState([]);
+    const [gridApi, setGridApi] = useState(null);
+
+    /**
+     * Event Handler fired when the grid is ready.
+     * This handler will initialize the grid api 
+     * in the state
+     */
+    const onInternalGridReady = useCallback((params) => {
+        setGridApi(params.api);
+        defined(onGridReady) && onGridReady(params);
+    }, [onGridReady]);
 
     const onInternalEntitySelectionChanged = useCallback((entities) => {
         setSelectedEntities(entities);
@@ -41,7 +52,7 @@ const DefaultEntityGrid = ({
         ?
         <div className='rcesiumext-defaultentitygrid'>
             <Space wrap className='rcesiumext-defaultentitygrid-menubar-container'>
-                <EntityGridOptionsDropdown viewer={viewer} ds={ds} selectedEntities={selectedEntities}/>
+                <EntityGridOptionsDropdown viewer={viewer} ds={ds} selectedEntities={selectedEntities} gridApi={gridApi}/>
             </Space>
             <div className='rcesiumext-defaultentitygrid-content-container'>
                 <EntityGrid
@@ -51,7 +62,7 @@ const DefaultEntityGrid = ({
                     columnDefs={columnDefs}
                     rowSelection={rowSelection}
                     className={className}
-                    onGridReady={onGridReady}
+                    onGridReady={onInternalGridReady}
                     onRowClicked={onRowClicked}
                     onEntitySelectionChanged = {onInternalEntitySelectionChanged}
                     selectedColor={selectedColor}

@@ -38,8 +38,8 @@ module.exports = {
       color: {
         //base: '61dafb',
         //link: 'firebrick',
-        link: '#61dafb',
-        linkHover: 'salmon',
+        linkHover: '#61dafb',
+        link: 'salmon',
         sidebarBackground: '#000000 ',
         codeBase:'#FFF',
         baseBackground: '#FFF',
@@ -85,6 +85,15 @@ module.exports = {
           {
             name: 'button',
             sections:[
+              {
+                name: 'common',
+                description: 'All the common buttons',
+                components: [
+                  'src/components/button/common/**/*.{js,jsx,ts,tsx}'
+                ],
+                exampleMode: 'expand', 
+                usageMode: 'expand',
+              },
               {
                 name: 'coordinate',
                 description: 'All the buttons to interact with coordinate position',

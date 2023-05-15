@@ -41,9 +41,7 @@ class ResourceFormat {
     writeJsonDefaultValuesForWfs() {
         const json = {};
         json.url = undefined;
-        json.headers = {
-            contentType: 'application/xml', 
-        };
+        json.headers = {};
         json.headers = JSON.stringify(json.headers, null, 4);
         json.queryParameters = {};
         json.queryParameters = JSON.stringify(json.queryParameters, null, 4);
@@ -59,9 +57,7 @@ class ResourceFormat {
     writeWfsJsonDefaultValues() {
         const json = {};
         json.url = undefined;
-        json.headers = {
-            contentType: 'application/xml', 
-        };
+        json.headers = {};
         json.queryParameters = undefined;
         //json.responseType= 'json';
 

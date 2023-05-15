@@ -1,6 +1,5 @@
 import React from 'react';
-import {Form, Slider, InputNumber, Select} from 'antd';
-import {TextureMinificationFilter, TextureMagnificationFilter } from 'cesium';
+import {Form, InputNumber} from 'antd';
 
 const ProviderFormItems = ({
     mode='new'
