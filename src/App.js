@@ -1,5 +1,5 @@
 import { useCallback, useState } from 'react';
-import { Ion, Terrain, GeoJsonDataSource, Color, defined, /*createOsmBuildingsAsync,*/ Cartesian3, Cesium3DTileset, DataSource, /*IonResource*/ } from "cesium";
+import { Ion, Math, Terrain, GeoJsonDataSource, Color, defined, /*createOsmBuildingsAsync,*/ Cartesian3, Cesium3DTileset, DataSource, GoogleMaps, createGooglePhotorealistic3DTileset } from "cesium";
 import ViewerWidget from './components/widget/viewer/ViewerWidget/ViewerWidget';
 import ImageryLayerTree from './components/tree/imageryLayer/ImageryLayerTree/ImageryLayerTree';
 import DataSourceTree from './components/tree/dataSource/DataSourceTree/DataSourceTree';
@@ -35,23 +35,25 @@ const wfsOptions = {
 // This is a temporary default access token
 Ion.defaultAccessToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI1OGZjNDZkNC1iOTdlLTRhYWMtODBjYy1mNWIzOGEwYjUxNjAiLCJpZCI6MTAzODcsInNjb3BlcyI6WyJhc3IiLCJnYyJdLCJpYXQiOjE1NTYyODk0MDl9.f13hGNgcrSFUzcocb5CpHD3Im9xzT0c7IDAPcpwGidc';
 
+GoogleMaps.defaultApiKey = 'add your key';
 
 const viewerOpts = {
-  terrain: Terrain.fromWorldTerrain({
-    requestWaterMask : true, //required for water effects
-    requestVertexNormals : true //required for lighting
-  }),
+  // terrain: Terrain.fromWorldTerrain({
+  //   requestWaterMask : true, //required for water effects
+  //   requestVertexNormals : true //required for lighting
+  // }),
   infoBox: false,
-  selectionIndicator: false
+  selectionIndicator: false,
 };
 
 const flyOpts = {
   //destination : Cartesian3.fromDegrees(-122.4175, 37.655, 400),
-  destination: Cartesian3.fromDegrees(4.352422633283487, 50.8468441328301, 400),
-  // orientation : {
-  //     heading : Math.toRadians(0.0),
-  //     pitch : Math.toRadians(-15.0),
-  // }
+  //destination: Cartesian3.fromDegrees(4.352422633283487, 50.8468441328301, 400),
+  destination: Cartesian3.fromDegrees(4.358948, 50.859114, 200),
+  orientation : {
+      heading : Math.toRadians(0.0),
+      pitch : Math.toRadians(-5.0),
+  }
 }
 
 function App() {
@@ -60,6 +62,7 @@ function App() {
   const [dataSource, setDataSource] = useState(null);
   
   const onStart = useCallback((aViewer) => {
+    aViewer.scene.globe.show = false;
     setDataSource(new GeoJsonDataSource('bld'));
     aViewer.imageryLayers.removeAll();
     // Add Cesium OSM Buildings, a global 3D buildings layer.
@@ -76,15 +79,15 @@ function App() {
     aViewer.scene.globe.depthTestAgainstTerrain = true;
     //add tileset
     //Cesium3DTileset.fromIonAssetId(IonResource.fromAssetId(1299995), {
-    Cesium3DTileset.fromUrl('https://mapuiexts.github.io/react-cesiumext.github.io/assets/3D_Tiles/UrbAdm3D_148170_3DTILES/tileset/tileset.json', {
-      backFaceCulling: false
-    })
-    .then((tileset) => {
-      aViewer.scene.primitives.add(tileset);
-    })
-    .catch((error) => {
-      console.log(`Error creating tileset: ${error}`);
-    });
+    // Cesium3DTileset.fromUrl('https://mapuiexts.github.io/react-cesiumext.github.io/assets/3D_Tiles/UrbAdm3D_148170_3DTILES/tileset/tileset.json', {
+    //   backFaceCulling: false
+    // })
+    // .then((tileset) => {
+    //   aViewer.scene.primitives.add(tileset);
+    // })
+    // .catch((error) => {
+    //   console.log(`Error creating tileset: ${error}`);
+    // });
 
     // const tileset = aViewer.scene.primitives.add(
     //   new Cesium3DTileset({
@@ -93,6 +96,16 @@ function App() {
     //     backFaceCulling: false
     //   })
     // );
+
+     // Add Google Photorealistic 3D Tileset
+     createGooglePhotorealistic3DTileset()
+     .then((tileset) => {
+         defined(aViewer) && !aViewer.isDestroyed() && aViewer.scene.primitives.add(tileset);
+     })
+     .catch((error) => {
+         console.log(`Error creating tileset: ${error}`);
+     }); 
+
     const layerOptions = {
       layers: [...belgiumImageryLayers.layers, ...defaultImageryLayers.layers]
     };
@@ -124,10 +137,11 @@ function App() {
         </div>
       </div>
       <div style={{height:'30%'}}>
-        {/*viewer && dataSource &&
+        { viewer && dataSource &&
             <EntityGrid viewer={viewer} ds={dataSource} />
-            <AgGridReact rowData={[]} getRowNodeId={(data) => data._id} deltaRowDataMode={true} immutableData={true} />
-      */}
+        }
+        
+        
       </div>
       {/* <OverlayTooltip viewer={viewer} visible={true}>
         <div>Draw a Line ...</div>

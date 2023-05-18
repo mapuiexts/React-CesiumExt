@@ -4,6 +4,7 @@ This Example shows the creation of a simple __Custom Viewer Widget__.
 
 ```js
 import CustomViewerWidget from './CustomViewerWidget';
+import AboutButton from '../../../button/common/AboutButton/AboutButton';
 import { Ion, createWorldTerrain, Cartesian3, Math, Cesium3DTileset } from "cesium";
 import ButtonControlContainer from '../../container/ButtonControlContainer/ButtonControlContainer';
 import '../../../../assets/css/react-cesiumext-controls.css';
@@ -36,9 +37,7 @@ const CustomViewerWidgetExample = () => {
 
     return (
       <CustomViewerWidget options={viewerOpts} onStart={onStart}>
-        <button className="react-cesiumext-control" style={{top:4, left:4, width:64, height:32}} onClick={()=> alert('hello')} >Hello</button>
-        <button className="react-cesiumext-control" style={{top:4, left:96, width:64, height:32}} onClick={()=> alert('hello')} >Hello</button>
-        <button className="react-cesiumext-control" style={{top:50, left:4, width:64, height:32}} onClick={()=> alert('hello')} >Hello</button>
+        <AboutButton className="react-cesiumext-control" style={{top:4, left:4}}/>
       </CustomViewerWidget>
     );
 };
